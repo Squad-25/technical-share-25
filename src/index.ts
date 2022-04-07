@@ -5,7 +5,7 @@ import connection from "./config/connection"
 // Pega users na database
 app.get("/users", async (req, res) => {
   try {
-    const result = await connection.raw('SELECT * FROM Users;')
+    const result = await connection.raw("SELECT * FROM Users;")
     res.send(result[0].length === 1 ? result[0][0] : result[0])
   } catch (error: any) {
     res.send(error.message)
@@ -38,12 +38,12 @@ app.get("/users/:id", async (req: Request, res: Response) => {
   try {
     const data = await connection.raw(`
        SELECT * FROM Users
-       WHERE id = ${req.params.id}; `);
+       WHERE id = ${req.params.id}; `)
 
-    res.status(200).send(data[0][0]);
+    res.status(200).send(data[0][0])
   } catch (error: any) {
-    console.log(error);
-    res.status(500).send("An unexpected error occurred");
+    console.log(error)
+    res.status(500).send("An unexpected error occurred")
   }
 })
 
@@ -59,18 +59,37 @@ app.put("/users/:id", async (req: Request, res: Response) => {
            photo = "${req.body.photo}",
            bio = "${req.body.bio}",
            links = "${req.body.links}",
-           role = "${req.body.role}",
-           mentorID = ${req.body.mentorID}
-       WHERE id = ${req.params.id}; `);
+           role = "${req.body.role}"
+       WHERE id = ${req.params.id}; `)
 
-       const data = await connection.raw(`
+    const data = await connection.raw(`
        SELECT * FROM Users
-       WHERE id = ${req.params.id}; `);
+       WHERE id = ${req.params.id}; `)
 
-    res.status(200).send(data[0][0]);
+    res.status(200).send(data[0][0])
   } catch (error: any) {
-    console.log(error.message);
-    res.status(500).send("An unexpected error occurred");
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+  }
+})
+
+// Adiciona ou atualiza um mentor no user
+app.put("/users/mentor/:id", async (req: Request, res: Response) => {
+  try {
+    await connection.raw(`
+       UPDATE Users
+        SET 
+           mentorID = "${req.body.mentorID}"
+       WHERE id = ${req.params.id}; `)
+
+    const data = await connection.raw(`
+       SELECT * FROM Users
+       WHERE id = ${req.params.id}; `)
+
+    res.status(200).send(data[0][0])
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
   }
 })
 
@@ -79,10 +98,54 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
   try {
     await connection.raw(`
        DELETE FROM Users  
-           WHERE id = ${req.params.id}; `);
-    res.status(200).send("Success!");
+           WHERE id = ${req.params.id}; `)
+    res.status(200).send("Success!")
   } catch (error: any) {
-    console.log(error.message);
-    res.status(500).send("An unexpected error occurred");
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
   }
+})
+
+// Pega posts
+app.get("/posts", async (req: Request, res: Response) => {
+  try {
+    const result = await connection.raw("SELECT * FROM Posts;")
+    res.send(result[0].length === 1 ? result[0][0] : result[0])
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+  }
+})
+
+// Cria post
+app.post("/posts", async (req: Request, res: Response) => {
+  try {
+    await connection.raw(`
+        INSERT INTO Posts
+           (userID, title, body, question)
+        VALUES (
+           ${req.body.userID},
+           "${req.body.title}",
+           "${req.body.body}",
+           "${req.body.question}"
+); `)
+    res.status(201).send("Success!")
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+}})
+
+// Vota no post
+app.put("/posts/:id", async (req: Request, res: Response) => {
+  try {
+    await connection.raw(`
+      UPDATE Posts
+      SET votes = ${req.body.direction === 1 ? "(votes +1)" : "(votes -1)"}
+      WHERE id = ${req.params.id};
+    `)
+    res.status(201).send("Success!")
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+}
 })

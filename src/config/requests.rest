@@ -1,12 +1,13 @@
+### Pega users
 GET http://localhost:3003/users HTTP/1.1
 content-type: application/json
 
-###
+### Pega user pelo id
 
 GET http://localhost:3003/users/4 HTTP/1.1
 content-type: application/json
 
-###
+### Cria novo user
 
 POST http://localhost:3003/users HTTP/1.1
 content-type: application/json
@@ -21,7 +22,7 @@ content-type: application/json
   "role": "dev"
 }
 
-###
+### Atualiza infos do user
 
 PUT http://localhost:3003/users/4 HTTP/1.1
 content-type: application/json
@@ -34,4 +35,39 @@ content-type: application/json
   "bio": "Testador de API",
   "links": "http://github.com/larrygotto",
   "role": "dev"
+}
+
+### Atualiza id do mentor em um user
+
+PUT http://localhost:3003/users/mentor/4 HTTP/1.1
+content-type: application/json
+
+{
+  "mentorID": 14
+}
+
+### Pega posts
+
+GET http://localhost:3003/posts HTTP/1.1
+content-type: application/json
+
+### Cria post
+
+POST http://localhost:3003/posts HTTP/1.1
+content-type: application/json
+
+{
+  "userID": 4,
+  "title": "Teste testando",
+  "body": "Bora testar então",
+  "question": false
+}
+
+### Vota no post 
+
+PUT http://localhost:3003/posts/4 HTTP/1.1
+content-type: application/json
+
+{
+  "direction": -1
 }
