@@ -29,7 +29,7 @@ app_1.default.post("/users", (req, res) => __awaiter(void 0, void 0, void 0, fun
     try {
         yield connection_1.default.raw(`
         INSERT INTO Users
-           (name, email, password, photo, bio, links, role)
+           (user_name, email, password, photo, bio, links, role)
         VALUES (
            "${req.body.name}",
            "${req.body.email}",
@@ -64,7 +64,7 @@ app_1.default.put("/users/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
         yield connection_1.default.raw(`
        UPDATE Users
         SET 
-           name = "${req.body.name}",
+           user_name = "${req.body.name}",
            email = "${req.body.email}",
            password = "${req.body.password}",
            photo = "${req.body.photo}",
@@ -116,7 +116,10 @@ app_1.default.delete("/users/:id", (req, res) => __awaiter(void 0, void 0, void 
 // Pega posts
 app_1.default.get("/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield connection_1.default.raw("SELECT * FROM Posts;");
+        const result = yield connection_1.default.raw(`SELECT id, user_name, photo, post_id, title, body, post_date, votes, comments 
+      FROM Users 
+      JOIN Posts 
+      ON Posts.userID = Users.id;`);
         res.send(result[0].length === 1 ? result[0][0] : result[0]);
     }
     catch (error) {
@@ -149,7 +152,7 @@ app_1.default.put("/posts/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
         yield connection_1.default.raw(`
       UPDATE Posts
       SET votes = ${req.body.direction === 1 ? "(votes +1)" : "(votes -1)"}
-      WHERE id = ${req.params.id};
+      WHERE post_id = ${req.params.id};
     `);
         res.status(201).send("Success!");
     }

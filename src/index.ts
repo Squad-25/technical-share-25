@@ -17,7 +17,7 @@ app.post("/users", async (req: Request, res: Response) => {
   try {
     await connection.raw(`
         INSERT INTO Users
-           (name, email, password, photo, bio, links, role)
+           (user_name, email, password, photo, bio, links, role)
         VALUES (
            "${req.body.name}",
            "${req.body.email}",
@@ -53,7 +53,7 @@ app.put("/users/:id", async (req: Request, res: Response) => {
     await connection.raw(`
        UPDATE Users
         SET 
-           name = "${req.body.name}",
+           user_name = "${req.body.name}",
            email = "${req.body.email}",
            password = "${req.body.password}",
            photo = "${req.body.photo}",
@@ -109,7 +109,12 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
 // Pega posts
 app.get("/posts", async (req: Request, res: Response) => {
   try {
-    const result = await connection.raw("SELECT * FROM Posts;")
+    const result = await connection.raw(
+      `SELECT id, user_name, photo, post_id, title, body, post_date, votes, comments 
+      FROM Users 
+      JOIN Posts 
+      ON Posts.userID = Users.id;`
+    )
     res.send(result[0].length === 1 ? result[0][0] : result[0])
   } catch (error: any) {
     console.log(error.message)
@@ -133,7 +138,8 @@ app.post("/posts", async (req: Request, res: Response) => {
   } catch (error: any) {
     console.log(error.message)
     res.status(500).send("An unexpected error occurred")
-}})
+  }
+})
 
 // Vota no post
 app.put("/posts/:id", async (req: Request, res: Response) => {
@@ -141,11 +147,11 @@ app.put("/posts/:id", async (req: Request, res: Response) => {
     await connection.raw(`
       UPDATE Posts
       SET votes = ${req.body.direction === 1 ? "(votes +1)" : "(votes -1)"}
-      WHERE id = ${req.params.id};
+      WHERE post_id = ${req.params.id};
     `)
     res.status(201).send("Success!")
   } catch (error: any) {
     console.log(error.message)
     res.status(500).send("An unexpected error occurred")
-}
+  }
 })
