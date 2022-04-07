@@ -1,0 +1,37 @@
+GET http://localhost:3003/users HTTP/1.1
+content-type: application/json
+
+###
+
+GET http://localhost:3003/users/4 HTTP/1.1
+content-type: application/json
+
+###
+
+POST http://localhost:3003/users HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Leo Rigotto",
+  "email": "leo@leo.com",
+  "password": "123456",
+  "photo": "http://photo.com",
+  "bio": "Apaixonado por códigos que funcionam",
+  "links": "http://github.com/larrygotto",
+  "role": "dev"
+}
+
+###
+
+PUT http://localhost:3003/users/4 HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Leo Rigotto",
+  "email": "leo@leo.com",
+  "password": "123456",
+  "photo": "http://photo.com",
+  "bio": "Testador de API",
+  "links": "http://github.com/larrygotto",
+  "role": "dev"
+}
