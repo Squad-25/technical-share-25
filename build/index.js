@@ -17,7 +17,7 @@ const connection_1 = __importDefault(require("./config/connection"));
 // Pega users na database
 app_1.default.get("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield connection_1.default.raw('SELECT * FROM Users;');
+        const result = yield connection_1.default.raw("SELECT * FROM Users;");
         res.send(result[0].length === 1 ? result[0][0] : result[0]);
     }
     catch (error) {
@@ -29,7 +29,7 @@ app_1.default.post("/users", (req, res) => __awaiter(void 0, void 0, void 0, fun
     try {
         yield connection_1.default.raw(`
         INSERT INTO Users
-           (name, email, password, photo, bio, links, role)
+           (user_name, email, password, photo, bio, links, role)
         VALUES (
            "${req.body.name}",
            "${req.body.email}",
@@ -64,14 +64,31 @@ app_1.default.put("/users/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
         yield connection_1.default.raw(`
        UPDATE Users
         SET 
-           name = "${req.body.name}",
+           user_name = "${req.body.name}",
            email = "${req.body.email}",
            password = "${req.body.password}",
            photo = "${req.body.photo}",
            bio = "${req.body.bio}",
            links = "${req.body.links}",
-           role = "${req.body.role}",
-           mentorID = ${req.body.mentorID}
+           role = "${req.body.role}"
+       WHERE id = ${req.params.id}; `);
+        const data = yield connection_1.default.raw(`
+       SELECT * FROM Users
+       WHERE id = ${req.params.id}; `);
+        res.status(200).send(data[0][0]);
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));
+// Adiciona ou atualiza um mentor no user
+app_1.default.put("/users/mentor/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield connection_1.default.raw(`
+       UPDATE Users
+        SET 
+           mentorID = "${req.body.mentorID}"
        WHERE id = ${req.params.id}; `);
         const data = yield connection_1.default.raw(`
        SELECT * FROM Users
@@ -90,6 +107,54 @@ app_1.default.delete("/users/:id", (req, res) => __awaiter(void 0, void 0, void 
        DELETE FROM Users  
            WHERE id = ${req.params.id}; `);
         res.status(200).send("Success!");
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));
+// Pega posts
+app_1.default.get("/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield connection_1.default.raw(`SELECT id, user_name, photo, post_id, title, body, post_date, votes, comments 
+      FROM Users 
+      JOIN Posts 
+      ON Posts.userID = Users.id;`);
+        res.send(result[0].length === 1 ? result[0][0] : result[0]);
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));
+// Cria post
+app_1.default.post("/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield connection_1.default.raw(`
+        INSERT INTO Posts
+           (userID, title, body, question)
+        VALUES (
+           ${req.body.userID},
+           "${req.body.title}",
+           "${req.body.body}",
+           "${req.body.question}"
+); `);
+        res.status(201).send("Success!");
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));
+// Vota no post
+app_1.default.put("/posts/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield connection_1.default.raw(`
+      UPDATE Posts
+      SET votes = ${req.body.direction === 1 ? "(votes +1)" : "(votes -1)"}
+      WHERE post_id = ${req.params.id};
+    `);
+        res.status(201).send("Success!");
     }
     catch (error) {
         console.log(error.message);
