@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import app from "./app"
-import connection from "./connection"
+import app from "./config/app"
+import connection from "./config/connection"
 
 // Pega users na database
 app.get("/users", async (req, res) => {
