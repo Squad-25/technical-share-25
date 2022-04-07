@@ -71,3 +71,14 @@ content-type: application/json
 {
   "direction": -1
 }
+
+### Cria comentario
+
+POST http://localhost:3003/posts/14/comment HTTP/1.1
+content-type: application/json
+
+{
+  "userID": 4,
+  "postID": 4,
+  "body": "Teste de comentário"
+}
