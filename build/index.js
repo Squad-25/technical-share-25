@@ -116,11 +116,23 @@ app_1.default.delete("/users/:id", (req, res) => __awaiter(void 0, void 0, void 
 // Pega posts
 app_1.default.get("/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield connection_1.default.raw(`SELECT id, user_name, photo, post_id, title, body, post_date, votes, comments 
-      FROM Users 
+        const posts = yield connection_1.default.raw(`SELECT id, user_name, photo, post_id, title, body, post_date, votes
+      FROM Users      
       JOIN Posts 
-      ON Posts.userID = Users.id;`);
-        res.send(result[0].length === 1 ? result[0][0] : result[0]);
+      ON Posts.userID = Users.id
+       ;`);
+        // LEFT JOIN Comments
+        // ON Comments.postID = Posts.post_id
+        const comments = yield connection_1.default.raw(`
+      SELECT comment_id, comment_userID, comment_body, comment_votes, comment_date
+      FROM Posts
+      JOIN Comments
+      ON Comments.postID = Posts.post_id ;`);
+        const result = {
+            posts: posts[0],
+            comments: comments[0]
+        };
+        res.send(result);
     }
     catch (error) {
         console.log(error.message);
@@ -154,6 +166,24 @@ app_1.default.put("/posts/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
       SET votes = ${req.body.direction === 1 ? "(votes +1)" : "(votes -1)"}
       WHERE post_id = ${req.params.id};
     `);
+        res.status(201).send("Success!");
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));
+// Cria comentário
+app_1.default.post("/posts/:id/comment", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield connection_1.default.raw(`
+        INSERT INTO Comments
+           (comment_userID, postID, comment_body)
+        VALUES (
+           ${req.body.userID},
+           ${req.body.postID},
+           "${req.body.body}"
+); `);
         res.status(201).send("Success!");
     }
     catch (error) {

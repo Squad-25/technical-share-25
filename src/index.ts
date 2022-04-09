@@ -109,13 +109,27 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
 // Pega posts
 app.get("/posts", async (req: Request, res: Response) => {
   try {
-    const result = await connection.raw(
-      `SELECT id, user_name, photo, post_id, title, body, post_date, votes, comments 
-      FROM Users 
+    const posts = await connection.raw(
+      `SELECT id, user_name, photo, post_id, title, body, post_date, votes
+      FROM Users      
       JOIN Posts 
-      ON Posts.userID = Users.id;`
+      ON Posts.userID = Users.id
+       ;`
     )
-    res.send(result[0].length === 1 ? result[0][0] : result[0])
+    // LEFT JOIN Comments
+      // ON Comments.postID = Posts.post_id
+    const comments = await connection.raw(`
+      SELECT comment_id, comment_userID, comment_body, comment_votes, comment_date
+      FROM Posts
+      JOIN Comments
+      ON Comments.postID = Posts.post_id ;`
+    )
+
+    const result = {
+      posts: posts[0],
+      comments: comments[0]
+    }
+    res.send(result)
   } catch (error: any) {
     console.log(error.message)
     res.status(500).send("An unexpected error occurred")
@@ -149,6 +163,24 @@ app.put("/posts/:id", async (req: Request, res: Response) => {
       SET votes = ${req.body.direction === 1 ? "(votes +1)" : "(votes -1)"}
       WHERE post_id = ${req.params.id};
     `)
+    res.status(201).send("Success!")
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+  }
+})
+
+// Cria comentário
+app.post("/posts/:id/comment", async (req: Request, res: Response) => {
+  try {
+    await connection.raw(`
+        INSERT INTO Comments
+           (comment_userID, postID, comment_body)
+        VALUES (
+           ${req.body.userID},
+           ${req.body.postID},
+           "${req.body.body}"
+); `)
     res.status(201).send("Success!")
   } catch (error: any) {
     console.log(error.message)
