@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./config/app"));
 const connection_1 = __importDefault(require("./config/connection"));
+const uuid_1 = require("uuid");
 // Pega users na database
 app_1.default.get("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -55,7 +56,9 @@ app_1.default.get("/users/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
     `);
         const data = {
             user: user[0][0],
-            skills: skills[0].map((skill) => { return skill.skill_name; }),
+            skills: skills[0].map((skill) => {
+                return skill.skill_name;
+            }),
         };
         res.status(200).send(data);
     }
@@ -107,16 +110,35 @@ app_1.default.get("/posts", (req, res) => __awaiter(void 0, void 0, void 0, func
       JOIN Posts 
       ON Posts.userID = Users.id
        ;`);
-        // LEFT JOIN Comments
-        // ON Comments.postID = Posts.post_id
+        res.send(posts[0]);
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));
+// Pega post por ID
+app_1.default.get("/posts/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const post = yield connection_1.default.raw(`SELECT id, user_name, photo, post_id, title, body, post_date, votes
+      FROM Users      
+      JOIN Posts 
+      ON Posts.userID = Users.id WHERE post_id = "${req.params.id}"
+       ;`);
         const comments = yield connection_1.default.raw(`
-      SELECT comment_id, comment_userID, comment_body, comment_votes, comment_date
+      SELECT  comment_userID, comment_body, comment_votes, comment_date
       FROM Posts
       JOIN Comments
-      ON Comments.postID = Posts.post_id ;`);
+      ON Comments.postID = Posts.post_id WHERE postID = "${req.params.id}";`);
+        const tags = yield connection_1.default.raw(`
+      SELECT skill_name FROM Skills WHERE postID = "${req.params.id}";
+      `);
         const data = {
-            posts: posts[0],
+            post: post[0][0],
             comments: comments[0],
+            tags: tags[0].map((skill) => {
+                return skill.skill_name;
+            }),
         };
         res.send(data);
     }
@@ -128,16 +150,29 @@ app_1.default.get("/posts", (req, res) => __awaiter(void 0, void 0, void 0, func
 // Cria post
 app_1.default.post("/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const postID = (0, uuid_1.v4)();
         yield connection_1.default.raw(`
         INSERT INTO Posts
-           (userID, title, body, question)
+           (POST_id, userID, title, body)
         VALUES (
+            "${postID}",
            ${req.body.userID},
            "${req.body.title}",
-           "${req.body.body}",
-           "${req.body.question}"
-); `);
-        res.status(201).send("Success!");
+           "${req.body.body}"
+        ); `);
+        const insert = (skill) => __awaiter(void 0, void 0, void 0, function* () {
+            yield connection_1.default.raw(`
+        INSERT INTO Skills
+           (skill_name, postID)
+        VALUES (
+           "${skill}",
+           "${postID}"
+    ); `);
+        });
+        req.body.skills.map((skill) => {
+            insert(skill);
+        });
+        res.status(201).send("Success! " + postID);
     }
     catch (error) {
         console.log(error.message);
@@ -167,7 +202,7 @@ app_1.default.post("/posts/:id/comment", (req, res) => __awaiter(void 0, void 0,
            (comment_userID, postID, comment_body)
         VALUES (
            ${req.body.userID},
-           ${req.body.postID},
+           "${req.params.id}",
            "${req.body.body}"
 ); `);
         res.status(201).send("Success!");
@@ -190,7 +225,6 @@ app_1.default.post("/skills/:userID", (req, res) => __awaiter(void 0, void 0, vo
 ); `);
         });
         req.body.skills.map((skill) => {
-            console.log("rodei", skill);
             insert(skill);
         });
         res.status(201).send("Success!");
