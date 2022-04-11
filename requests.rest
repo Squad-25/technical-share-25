@@ -1,0 +1,24 @@
+GET http://localhost:3003/users/24
+
+###
+
+POST http://localhost:3003/users
+Content-Type: application/json; charset=utf-8
+
+{
+  "name": "Carlos Cleiton",
+  "email": "carlos@cleiton.com",
+  "password": "123456",
+  "photo": "https://avatars.githubusercontent.com/u/61395996?v=4",
+  "phone": "(11) 99999-0000",
+  "role": "UX"
+}
+
+###
+
+POST http://localhost:3003/skills/24
+Content-Type: application/json; charset=utf-8
+
+{
+  "skills": ["html", "css", "javascript"]
+}
