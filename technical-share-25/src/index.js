@@ -8,10 +8,11 @@ import CssBaseline from '@mui/material/CssBaseline'
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssBaseline />
+    <CssBaseline>
     <BrowserRouter>
       <Router />
     </BrowserRouter>
+    </CssBaseline>
   </React.StrictMode>,
   document.getElementById('root')
 );

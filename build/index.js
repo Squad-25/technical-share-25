@@ -114,11 +114,11 @@ app_1.default.get("/posts", (req, res) => __awaiter(void 0, void 0, void 0, func
       FROM Posts
       JOIN Comments
       ON Comments.postID = Posts.post_id ;`);
-        const result = {
+        const data = {
             posts: posts[0],
             comments: comments[0],
         };
-        res.send(result);
+        res.send(data);
     }
     catch (error) {
         console.log(error.message);
