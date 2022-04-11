@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import app from "./config/app"
 import connection from "./config/connection"
+import { v4 as uuidv4 } from "uuid"
 
 // Pega users na database
 app.get("/users", async (req, res) => {
@@ -44,7 +45,9 @@ app.get("/users/:id", async (req: Request, res: Response) => {
 
     const data = {
       user: user[0][0],
-      skills: skills[0].map((skill: {skill_name: String}) => {return skill.skill_name}),
+      skills: skills[0].map((skill: { skill_name: String }) => {
+        return skill.skill_name
+      }),
     }
 
     res.status(200).send(data)
@@ -101,18 +104,42 @@ app.get("/posts", async (req: Request, res: Response) => {
       ON Posts.userID = Users.id
        ;`
     )
-    // LEFT JOIN Comments
-    // ON Comments.postID = Posts.post_id
+    res.send(posts[0])
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+  }
+})
+
+// Pega post por ID
+
+app.get("/posts/:id", async (req: Request, res: Response) => {
+  try {
+    const post = await connection.raw(
+      `SELECT id, user_name, photo, post_id, title, body, post_date, votes
+      FROM Users      
+      JOIN Posts 
+      ON Posts.userID = Users.id WHERE post_id = "${req.params.id}"
+       ;`
+    )
     const comments = await connection.raw(`
-      SELECT comment_id, comment_userID, comment_body, comment_votes, comment_date
+      SELECT  comment_userID, comment_body, comment_votes, comment_date
       FROM Posts
       JOIN Comments
-      ON Comments.postID = Posts.post_id ;`)
+      ON Comments.postID = Posts.post_id WHERE postID = "${req.params.id}";`)
+
+    const tags = await connection.raw(`
+      SELECT skill_name FROM Skills WHERE postID = "${req.params.id}";
+      `)
 
     const data = {
-      posts: posts[0],
+      post: post[0][0],
       comments: comments[0],
+      tags: tags[0].map((skill: { skill_name: String }) => {
+        return skill.skill_name
+      }),
     }
+
     res.send(data)
   } catch (error: any) {
     console.log(error.message)
@@ -123,16 +150,29 @@ app.get("/posts", async (req: Request, res: Response) => {
 // Cria post
 app.post("/posts", async (req: Request, res: Response) => {
   try {
+    const postID = uuidv4()
     await connection.raw(`
         INSERT INTO Posts
-           (userID, title, body, question)
+           (POST_id, userID, title, body)
         VALUES (
+            "${postID}",
            ${req.body.userID},
            "${req.body.title}",
-           "${req.body.body}",
-           "${req.body.question}"
-); `)
-    res.status(201).send("Success!")
+           "${req.body.body}"
+        ); `)
+    const insert = async (skill: { name: string; userID: number }) => {
+      await connection.raw(`
+        INSERT INTO Skills
+           (skill_name, postID)
+        VALUES (
+           "${skill}",
+           "${postID}"
+    ); `)
+    }
+    req.body.skills.map((skill: { name: string; userID: number }) => {
+      insert(skill)
+    })
+    res.status(201).send("Success! " + postID)
   } catch (error: any) {
     console.log(error.message)
     res.status(500).send("An unexpected error occurred")
@@ -162,7 +202,7 @@ app.post("/posts/:id/comment", async (req: Request, res: Response) => {
            (comment_userID, postID, comment_body)
         VALUES (
            ${req.body.userID},
-           ${req.body.postID},
+           "${req.params.id}",
            "${req.body.body}"
 ); `)
     res.status(201).send("Success!")
@@ -185,7 +225,6 @@ app.post("/skills/:userID", async (req: Request, res: Response) => {
 ); `)
     }
     req.body.skills.map((skill: { name: string; userID: number }) => {
-      console.log("rodei", skill)
       insert(skill)
     })
     res.status(201).send("Success!")
