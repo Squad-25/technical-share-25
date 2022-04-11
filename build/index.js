@@ -29,14 +29,13 @@ app_1.default.post("/users", (req, res) => __awaiter(void 0, void 0, void 0, fun
     try {
         yield connection_1.default.raw(`
         INSERT INTO Users
-           (user_name, email, password, photo, bio, links, role)
+           (user_name, email, password, photo, phone, role)
         VALUES (
            "${req.body.name}",
            "${req.body.email}",
            "${req.body.password}",
            "${req.body.photo}",
-           "${req.body.bio}",
-           "${req.body.links}",
+           "${req.body.phone}",
            "${req.body.role}"
 ); `);
         res.status(201).send("Success!");
@@ -48,10 +47,17 @@ app_1.default.post("/users", (req, res) => __awaiter(void 0, void 0, void 0, fun
 // Pega user pelo id
 app_1.default.get("/users/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data = yield connection_1.default.raw(`
-       SELECT * FROM Users
-       WHERE id = ${req.params.id}; `);
-        res.status(200).send(data[0][0]);
+        const user = yield connection_1.default.raw(`
+       SELECT id, user_name, email, photo, phone, role FROM Users
+       WHERE id = ${req.params.id};`);
+        const skills = yield connection_1.default.raw(`
+      SELECT skill_name FROM Skills WHERE userID = ${req.params.id};
+    `);
+        const data = {
+            user: user[0][0],
+            skills: skills[0].map((skill) => { return skill.skill_name; }),
+        };
+        res.status(200).send(data);
     }
     catch (error) {
         console.log(error);
@@ -66,29 +72,9 @@ app_1.default.put("/users/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
         SET 
            user_name = "${req.body.name}",
            email = "${req.body.email}",
-           password = "${req.body.password}",
            photo = "${req.body.photo}",
-           bio = "${req.body.bio}",
-           links = "${req.body.links}",
+           phone = "${req.body.phone}",
            role = "${req.body.role}"
-       WHERE id = ${req.params.id}; `);
-        const data = yield connection_1.default.raw(`
-       SELECT * FROM Users
-       WHERE id = ${req.params.id}; `);
-        res.status(200).send(data[0][0]);
-    }
-    catch (error) {
-        console.log(error.message);
-        res.status(500).send("An unexpected error occurred");
-    }
-}));
-// Adiciona ou atualiza um mentor no user
-app_1.default.put("/users/mentor/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield connection_1.default.raw(`
-       UPDATE Users
-        SET 
-           mentorID = "${req.body.mentorID}"
        WHERE id = ${req.params.id}; `);
         const data = yield connection_1.default.raw(`
        SELECT * FROM Users
@@ -130,7 +116,7 @@ app_1.default.get("/posts", (req, res) => __awaiter(void 0, void 0, void 0, func
       ON Comments.postID = Posts.post_id ;`);
         const result = {
             posts: posts[0],
-            comments: comments[0]
+            comments: comments[0],
         };
         res.send(result);
     }
@@ -184,6 +170,48 @@ app_1.default.post("/posts/:id/comment", (req, res) => __awaiter(void 0, void 0,
            ${req.body.postID},
            "${req.body.body}"
 ); `);
+        res.status(201).send("Success!");
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));
+// Insere Skills User
+app_1.default.post("/skills/:userID", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const insert = (skill) => __awaiter(void 0, void 0, void 0, function* () {
+            yield connection_1.default.raw(`
+    INSERT INTO Skills
+       (skill_name, userID)
+    VALUES (
+       "${skill}",
+       ${req.params.userID}
+); `);
+        });
+        req.body.skills.map((skill) => {
+            console.log("rodei", skill);
+            insert(skill);
+        });
+        res.status(201).send("Success!");
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));
+// Insere Skills Post
+app_1.default.post("/posts/tag/:postID", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield req.body.map((skill) => {
+            connection_1.default.raw(`
+    INSERT INTO Skills
+       (skill_name, postID)
+    VALUES (
+       "${skill.name}",
+       ${skill.postID}
+); `);
+        });
         res.status(201).send("Success!");
     }
     catch (error) {

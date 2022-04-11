@@ -17,14 +17,13 @@ app.post("/users", async (req: Request, res: Response) => {
   try {
     await connection.raw(`
         INSERT INTO Users
-           (user_name, email, password, photo, bio, links, role)
+           (user_name, email, password, photo, phone, role)
         VALUES (
            "${req.body.name}",
            "${req.body.email}",
            "${req.body.password}",
            "${req.body.photo}",
-           "${req.body.bio}",
-           "${req.body.links}",
+           "${req.body.phone}",
            "${req.body.role}"
 ); `)
     res.status(201).send("Success!")
@@ -36,11 +35,19 @@ app.post("/users", async (req: Request, res: Response) => {
 // Pega user pelo id
 app.get("/users/:id", async (req: Request, res: Response) => {
   try {
-    const data = await connection.raw(`
-       SELECT * FROM Users
-       WHERE id = ${req.params.id}; `)
+    const user = await connection.raw(`
+       SELECT id, user_name, email, photo, phone, role FROM Users
+       WHERE id = ${req.params.id};`)
+    const skills = await connection.raw(`
+      SELECT skill_name FROM Skills WHERE userID = ${req.params.id};
+    `)
 
-    res.status(200).send(data[0][0])
+    const data = {
+      user: user[0][0],
+      skills: skills[0].map((skill: {skill_name: String}) => {return skill.skill_name}),
+    }
+
+    res.status(200).send(data)
   } catch (error: any) {
     console.log(error)
     res.status(500).send("An unexpected error occurred")
@@ -55,31 +62,9 @@ app.put("/users/:id", async (req: Request, res: Response) => {
         SET 
            user_name = "${req.body.name}",
            email = "${req.body.email}",
-           password = "${req.body.password}",
            photo = "${req.body.photo}",
-           bio = "${req.body.bio}",
-           links = "${req.body.links}",
+           phone = "${req.body.phone}",
            role = "${req.body.role}"
-       WHERE id = ${req.params.id}; `)
-
-    const data = await connection.raw(`
-       SELECT * FROM Users
-       WHERE id = ${req.params.id}; `)
-
-    res.status(200).send(data[0][0])
-  } catch (error: any) {
-    console.log(error.message)
-    res.status(500).send("An unexpected error occurred")
-  }
-})
-
-// Adiciona ou atualiza um mentor no user
-app.put("/users/mentor/:id", async (req: Request, res: Response) => {
-  try {
-    await connection.raw(`
-       UPDATE Users
-        SET 
-           mentorID = "${req.body.mentorID}"
        WHERE id = ${req.params.id}; `)
 
     const data = await connection.raw(`
@@ -117,19 +102,18 @@ app.get("/posts", async (req: Request, res: Response) => {
        ;`
     )
     // LEFT JOIN Comments
-      // ON Comments.postID = Posts.post_id
+    // ON Comments.postID = Posts.post_id
     const comments = await connection.raw(`
       SELECT comment_id, comment_userID, comment_body, comment_votes, comment_date
       FROM Posts
       JOIN Comments
-      ON Comments.postID = Posts.post_id ;`
-    )
+      ON Comments.postID = Posts.post_id ;`)
 
-    const result = {
+    const data = {
       posts: posts[0],
-      comments: comments[0]
+      comments: comments[0],
     }
-    res.send(result)
+    res.send(data)
   } catch (error: any) {
     console.log(error.message)
     res.status(500).send("An unexpected error occurred")
@@ -181,6 +165,48 @@ app.post("/posts/:id/comment", async (req: Request, res: Response) => {
            ${req.body.postID},
            "${req.body.body}"
 ); `)
+    res.status(201).send("Success!")
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+  }
+})
+
+// Insere Skills User
+app.post("/skills/:userID", async (req: Request, res: Response) => {
+  try {
+    const insert = async (skill: { name: string; userID: number }) => {
+      await connection.raw(`
+    INSERT INTO Skills
+       (skill_name, userID)
+    VALUES (
+       "${skill}",
+       ${req.params.userID}
+); `)
+    }
+    req.body.skills.map((skill: { name: string; userID: number }) => {
+      console.log("rodei", skill)
+      insert(skill)
+    })
+    res.status(201).send("Success!")
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+  }
+})
+
+// Insere Skills Post
+app.post("/posts/tag/:postID", async (req: Request, res: Response) => {
+  try {
+    await req.body.map((skill: { name: string; postID: number }) => {
+      connection.raw(`
+    INSERT INTO Skills
+       (skill_name, postID)
+    VALUES (
+       "${skill.name}",
+       ${skill.postID}
+); `)
+    })
     res.status(201).send("Success!")
   } catch (error: any) {
     console.log(error.message)
