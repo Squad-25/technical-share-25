@@ -7,7 +7,7 @@ import MentorProfiles from "../pages/mentor-profile"
 import Question from "../pages/question"
 import Rank from "../pages/rank"
 import Search from "../pages/search"
-import SkillsPrompt from "../pages/skills-prompt"
+import SkillsPrompt from "../pages/skills-prompt/skillsPrompt"
 import NotFound from "../pages/404"
 import Home from "../pages/home/home"
 
