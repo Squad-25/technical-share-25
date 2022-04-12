@@ -2,7 +2,7 @@ import React from "react"
 import { Route, Routes } from "react-router-dom"
 import Login from "../pages/login"
 import CreateQuestion from "../pages/create-question"
-import Profile from "../pages/user-profile"
+import UserProfile from "../pages/user-profile"
 import User from "../pages/user/user"
 import Question from "../pages/question"
 import Rank from "../pages/rank"
@@ -17,7 +17,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/posts/new" element={<CreateQuestion />} />
-      <Route path="/profile/:id" element={<Profile />} />
+      <Route path="/profile/:id" element={<UserProfile />} />
       <Route path="/user/:id" element={<User />} />
       <Route path="/question" element={<Question />} />
       <Route path="/rank" element={<Rank />} />

@@ -104,7 +104,26 @@ app.get("/posts", async (req: Request, res: Response) => {
       ON Posts.userID = Users.id
        ;`
     )
-    res.send(posts[0])
+    const skills = await connection.raw(`
+      SELECT skill_name, postID
+      FROM Skills
+      LEFT JOIN Posts 
+      ON Posts.post_id = Skills.postID
+      `)
+
+    const newPosts = posts[0].map((post: any, i: number) => {
+      const newSkill = skills[0].filter((skill: any) => {
+        if (skill.postID === post.post_id) {
+          return true
+        }
+      }).map((skill: any) => {
+        return skill.skill_name
+      })
+      post = { ...post, tags: newSkill }
+      return post
+    })
+
+    res.send(newPosts)
   } catch (error: any) {
     console.log(error.message)
     res.status(500).send("An unexpected error occurred")
@@ -112,7 +131,6 @@ app.get("/posts", async (req: Request, res: Response) => {
 })
 
 // Pega post por ID
-
 app.get("/posts/:id", async (req: Request, res: Response) => {
   try {
     const post = await connection.raw(
@@ -159,7 +177,7 @@ app.get("/user/:id/posts", async (req: Request, res: Response) => {
     )
 
     const data = {
-      posts: post[0]
+      posts: post[0],
     }
 
     res.send(data)
@@ -276,14 +294,14 @@ app.post("/posts/tag/:postID", async (req: Request, res: Response) => {
 })
 
 // Pega skills
-app.get('/poststags', async (req: Request, res: Response) => {
-    try {
-      const skills = await connection.raw(`
+app.get("/poststags", async (req: Request, res: Response) => {
+  try {
+    const skills = await connection.raw(`
         SELECT * FROM Skills;
         `)
-      res.send(skills[0])
-    } catch (error: any) {
-      console.log(error.message)
-      res.status(500).send("An unexpected error occurred")
-    }
-  })
+    res.send(skills[0])
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+  }
+})
