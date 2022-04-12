@@ -185,7 +185,7 @@ app_1.default.put("/posts/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
         yield connection_1.default.raw(`
       UPDATE Posts
       SET votes = ${req.body.direction === 1 ? "(votes +1)" : "(votes -1)"}
-      WHERE post_id = ${req.params.id};
+      WHERE post_id = "${req.params.id}";
     `);
         res.status(201).send("Success!");
     }

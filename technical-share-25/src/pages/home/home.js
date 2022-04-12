@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material"
 import React from "react"
-import BottomNavigationComponent from "../../components/BottomNavigationComponent"
+
 
 export default function Home() {
   return (
@@ -8,8 +8,6 @@ export default function Home() {
       <Typography variant="h1" component="h1">
         Olá, eu sou App
       </Typography>
-
-      <BottomNavigationComponent />
     </div>
   )
 }
