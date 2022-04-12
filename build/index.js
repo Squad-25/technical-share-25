@@ -271,3 +271,16 @@ app_1.default.post("/posts/tag/:postID", (req, res) => __awaiter(void 0, void 0,
         res.status(500).send("An unexpected error occurred");
     }
 }));
+// Pega skills
+app_1.default.get('/poststags', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const skills = yield connection_1.default.raw(`
+        SELECT * FROM Skills;
+        `);
+        res.send(skills[0]);
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));

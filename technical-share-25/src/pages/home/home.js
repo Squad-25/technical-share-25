@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material"
 import React from "react"
+import HomeFab from "../../components/home-fab/homeFab"
 
 
 export default function Home() {

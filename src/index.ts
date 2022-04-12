@@ -274,3 +274,16 @@ app.post("/posts/tag/:postID", async (req: Request, res: Response) => {
     res.status(500).send("An unexpected error occurred")
   }
 })
+
+// Pega skills
+app.get('/poststags', async (req: Request, res: Response) => {
+    try {
+      const skills = await connection.raw(`
+        SELECT * FROM Skills;
+        `)
+      res.send(skills[0])
+    } catch (error: any) {
+      console.log(error.message)
+      res.status(500).send("An unexpected error occurred")
+    }
+  })
