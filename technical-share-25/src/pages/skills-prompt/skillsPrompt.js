@@ -59,6 +59,12 @@ const ChipContainer = styled(Box)`
 const Skill = styled(Chip)`
   margin: 0 4px 8px 0;
   width: fit-content;
+  background-color: #ba3300;
+  color: #ffffff;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
 `
 
 export default function SkillsPrompt() {
