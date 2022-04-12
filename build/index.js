@@ -289,12 +289,15 @@ app_1.default.post("/posts/tag/:postID", (req, res) => __awaiter(void 0, void 0,
     }
 }));
 // Pega skills
-app_1.default.get("/poststags", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app_1.default.get("/posttags", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const skills = yield connection_1.default.raw(`
-        SELECT * FROM Skills;
+        SELECT DISTINCT skill_name FROM Skills;
         `);
-        res.send(skills[0]);
+        const tags = skills[0].map((skill) => {
+            return skill.skill_name;
+        });
+        res.send({ tags: tags });
     }
     catch (error) {
         console.log(error.message);
