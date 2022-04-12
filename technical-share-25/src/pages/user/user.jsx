@@ -1,4 +1,4 @@
-import React, { Suspense } from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
 import useRequestData from "../../hooks/useRequestData"
 import { BASE_URL } from "../../services/urls"
@@ -6,9 +6,9 @@ import Loading from "../../assets/loading"
 import styledComponents from "styled-components"
 import { Chip } from "@mui/material"
 import styled from "@emotion/styled"
-import PhoneIcon from '@mui/icons-material/Phone'
-import MailOutlineIcon from '@mui/icons-material/MailOutline'
-
+import PhoneIcon from "@mui/icons-material/Phone"
+import MailOutlineIcon from "@mui/icons-material/MailOutline"
+import ProfileCard from "../../components/profile-card/profileCard"
 
 const PageContainer = styledComponents.div`
   display: flex;
@@ -120,42 +120,60 @@ function User() {
   }
 
   const renderPage = () => {
-    if (data.user){
-        return (
-      <PageContainer>
-        <ProfilePic src={data.user.photo} />
-        <h4>{data.user.user_name}</h4>
-        <h6>{data.user.role}</h6>
-        <RankContainer>
-          <div>
-            <h6>200</h6>
-            <h8>Interações</h8>
-          </div>
-          <div>
-            <h6>
-              120
-              <Triangle />
-            </h6>
-            <h8>Posição</h8>
-          </div>
-        </RankContainer>
-        <h7>Conhecimentos e skills</h7>
-        <SkillsContainer>{data ? renderSkills() : <></>}</SkillsContainer>
-        <h7 className="contato">Contato</h7>
-        <ContactContainer>
-            <PhoneIcon/>
+    if (data.user) {
+      return (
+        <PageContainer>
+          <ProfilePic src={data.user.photo} />
+          <h4>{data.user.user_name}</h4>
+          <h6>{data.user.role}</h6>
+          <RankContainer>
+            <div>
+              <h6>200</h6>
+              <h8>Interações</h8>
+            </div>
+            <div>
+              <h6>
+                120
+                <Triangle />
+              </h6>
+              <h8>Posição</h8>
+            </div>
+          </RankContainer>
+          <h7>Conhecimentos e skills</h7>
+          <SkillsContainer>{data ? renderSkills() : <></>}</SkillsContainer>
+          <h7 className="contato">Contato</h7>
+          <ContactContainer>
+            <PhoneIcon />
             <a href={`tel:+55${data.user.phone}`}>{data.user.phone}</a>
-        </ContactContainer>
-        <ContactContainer>
-            <MailOutlineIcon/>
+          </ContactContainer>
+          <ContactContainer>
+            <MailOutlineIcon />
             <a href={`mailto:${data.user.email}`}>{data.user.email}</a>
-        </ContactContainer>
+          </ContactContainer>
 
-      </PageContainer>
-    )} else return <h1>Ops! Perfil não encontrado</h1>
+          <ProfileCard
+            user_name={data.user.user_name}
+            photo={data.user.photo}
+            role={data.user.role}
+            skills={data.skills}
+            id={data.user.id}
+          />
+        </PageContainer>
+      )
+    } else return <h1>Ops! Perfil não encontrado</h1>
   }
 
-  return <>{data ? renderPage() : <LoadingContainer><Loading /></LoadingContainer>}</>
+  return (
+    <>
+      {data ? (
+        renderPage()
+      ) : (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      )}
+    </>
+  )
 }
 
 export default User
