@@ -185,7 +185,7 @@ app.put("/posts/:id", async (req: Request, res: Response) => {
     await connection.raw(`
       UPDATE Posts
       SET votes = ${req.body.direction === 1 ? "(votes +1)" : "(votes -1)"}
-      WHERE post_id = ${req.params.id};
+      WHERE post_id = "${req.params.id}";
     `)
     res.status(201).send("Success!")
   } catch (error: any) {

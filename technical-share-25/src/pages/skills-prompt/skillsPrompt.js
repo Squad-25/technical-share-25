@@ -1,12 +1,13 @@
-import { Button, InputAdornment, TextField } from "@mui/material"
+import { Button, Chip, InputAdornment, TextField } from "@mui/material"
 import React, { useState } from "react"
 import styledComponents from "styled-components"
 import styled from "@emotion/styled"
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded"
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search"
 import axios from "axios"
 import { BASE_URL, userID } from "../../services/urls"
 import { useNavigate } from "react-router-dom"
+import { Box } from "@mui/system"
 
 const PageContainer = styledComponents.div`
   padding: 25px;
@@ -49,6 +50,17 @@ const ConfirmButton = styled(Button)`
   margin-top: 30px;
 `
 
+const ChipContainer = styled(Box)`
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 16px;
+`
+
+const Skill = styled(Chip)`
+  margin: 0 4px 8px 0;
+  width: fit-content;
+`
+
 export default function SkillsPrompt() {
   const [input, setInput] = useState("")
   const [userSkills, setUserSkills] = useState([])
@@ -57,7 +69,19 @@ export default function SkillsPrompt() {
 
   const renderSkills = () => {
     const skillSet = userSkills.map((skill) => {
-      return <p>{skill}</p>
+      return (
+        <Skill
+          key={skill}
+          id={skill}
+          label={skill}
+          onDelete={() => {
+            const newSkills = userSkills.filter((deleteSkill) => {
+              return skill !== deleteSkill
+            })
+            setUserSkills(newSkills)
+          }}
+        />
+      )
     })
     return skillSet
   }
@@ -69,23 +93,27 @@ export default function SkillsPrompt() {
 
   const submitSkill = (e) => {
     e.preventDefault()
-          setUserSkills([...userSkills, input])
-          setInput("")
+    if (userSkills.some((skill) => skill === input)) {
+      setInput("")
+    } else {
+      setUserSkills([...userSkills, input])
+      setInput("")}
   }
-  
+
   const sendSkills = () => {
     const request = {
-     skills: userSkills
+      skills: userSkills,
     }
 
-    axios.post(BASE_URL + `/skills/${userID}`, request)
-    .then((res) => {
-      alert('Skills adicionadas!')
-      navigate('/')
-    })
-    .catch((err) =>{
-      console.log(err)
-    })
+    axios
+      .post(BASE_URL + `/skills/${userID}`, request)
+      .then((res) => {
+        alert("Skills adicionadas!")
+        navigate("/")
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
@@ -104,10 +132,10 @@ export default function SkillsPrompt() {
         </p>
 
         <SkillsInput
-        autoFocus
+          autoFocus
           error={false}
           value={input}
-          placeholder="html, css, javascript..."
+          placeholder="Digite suas skills"
           type="text"
           name="skills"
           onChange={(e) => setInput(e.target.value)}
@@ -119,13 +147,19 @@ export default function SkillsPrompt() {
                 <AddCircleRoundedIcon />
               </Button>
             ) : (
-              <InputAdornment position="end"><SearchIcon/></InputAdornment>
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
             ),
           }}
         />
       </PromptContainer>
-      {renderSkills()}
-      <ConfirmButton variant="contained" disabled={isDisabled()} onClick={sendSkills}>
+      <ChipContainer>{renderSkills()}</ChipContainer>
+      <ConfirmButton
+        variant="contained"
+        disabled={isDisabled()}
+        onClick={sendSkills}
+      >
         Confirmar
       </ConfirmButton>
     </PageContainer>

@@ -2,8 +2,8 @@ import React from "react"
 import { Route, Routes } from "react-router-dom"
 import Login from "../pages/login"
 import CreateQuestion from "../pages/create-question"
-import UserProfiles from "../pages/user-profile"
-import MentorProfiles from "../pages/mentor-profile"
+import Profile from "../pages/user-profile"
+import User from "../pages/mentor-profile/mentorProfile"
 import Question from "../pages/question"
 import Rank from "../pages/rank"
 import Search from "../pages/search"
@@ -17,8 +17,8 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/create-question" element={<CreateQuestion />} />
-      <Route path="/user-profile/:id" element={<UserProfiles />} />
-      <Route path="/mentor-profile/:id" element={<MentorProfiles />} />
+      <Route path="/profile/:id" element={<Profile />} />
+      <Route path="/user/:id" element={<User />} />
       <Route path="/question" element={<Question />} />
       <Route path="/rank" element={<Rank />} />
       <Route path="/search" element={<Search />} />
