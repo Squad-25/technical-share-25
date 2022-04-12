@@ -14,6 +14,7 @@ const PageContainer = styledComponents.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottm
   h4 {
     font-style: normal;
     font-weight: 400;
@@ -56,7 +57,7 @@ const RankContainer = styledComponents.div`
 
 const ProfilePic = styledComponents.img`
   width: 30%;
-  border-radius: 150px;
+  border-radius: 50%;
   margin: 22px;
 `
 
