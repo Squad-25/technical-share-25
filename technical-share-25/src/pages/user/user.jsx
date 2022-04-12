@@ -150,14 +150,6 @@ function User() {
             <MailOutlineIcon />
             <a href={`mailto:${data.user.email}`}>{data.user.email}</a>
           </ContactContainer>
-
-          <ProfileCard
-            user_name={data.user.user_name}
-            photo={data.user.photo}
-            role={data.user.role}
-            skills={data.skills}
-            id={data.user.id}
-          />
         </PageContainer>
       )
     } else return <h1>Ops! Perfil não encontrado</h1>
