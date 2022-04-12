@@ -6,7 +6,7 @@ const LoadingIcon = styled.img`
 align-self: center;
 justify-self: center;
 width: 40px;
-  animation: load 1000ms ease infinite;
+  animation: load 1500ms ease infinite;
   @keyframes load {
     from {transform: rotate(0deg)}
     to {transform: rotate(-364deg)}

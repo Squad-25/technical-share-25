@@ -6,6 +6,9 @@ import Loading from "../../assets/loading"
 import styledComponents from "styled-components"
 import { Chip } from "@mui/material"
 import styled from "@emotion/styled"
+import PhoneIcon from '@mui/icons-material/Phone'
+import MailOutlineIcon from '@mui/icons-material/MailOutline'
+
 
 const PageContainer = styledComponents.div`
   display: flex;
@@ -34,6 +37,9 @@ const PageContainer = styledComponents.div`
     line-height: 24px;
     align-self: flex-start;
     margin-left: 15%;
+  }
+  .contato{
+      margin-bottom: 12px;
   }
 `
 
@@ -68,6 +74,27 @@ const SkillsContainer = styledComponents.div`
     padding: 16px 15%;
 `
 
+const ContactContainer = styledComponents.div`
+    display: flex;
+    margin: 4px 15%;
+    align-self: flex-start;
+    align-items: center;
+    p, a{
+        margin-left: 12px;
+        text-decoration: none;
+        color: #BA3300;
+    }
+`
+
+const LoadingContainer = styledComponents.div`
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+`
+
 const Skill = styled(Chip)`
   margin: 0 4px 8px 0;
   width: fit-content;
@@ -93,7 +120,8 @@ function User() {
   }
 
   const renderPage = () => {
-    return (
+    if (data.user){
+        return (
       <PageContainer>
         <ProfilePic src={data.user.photo} />
         <h4>{data.user.user_name}</h4>
@@ -113,11 +141,21 @@ function User() {
         </RankContainer>
         <h7>Conhecimentos e skills</h7>
         <SkillsContainer>{data ? renderSkills() : <></>}</SkillsContainer>
+        <h7 className="contato">Contato</h7>
+        <ContactContainer>
+            <PhoneIcon/>
+            <a href={`tel:+55${data.user.phone}`}>{data.user.phone}</a>
+        </ContactContainer>
+        <ContactContainer>
+            <MailOutlineIcon/>
+            <a href={`mailto:${data.user.email}`}>{data.user.email}</a>
+        </ContactContainer>
+
       </PageContainer>
-    )
+    )} else return <h1>Ops! Perfil não encontrado</h1>
   }
 
-  return <PageContainer>{data ? renderPage() : <Loading />}</PageContainer>
+  return <>{data ? renderPage() : <LoadingContainer><Loading /></LoadingContainer>}</>
 }
 
 export default User
