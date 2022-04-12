@@ -9,6 +9,7 @@ export default function Home() {
       <Typography variant="h1" component="h1">
         Olá, eu sou a Home
       </Typography>
+      <HomeFab/>
     </div>
   )
 }

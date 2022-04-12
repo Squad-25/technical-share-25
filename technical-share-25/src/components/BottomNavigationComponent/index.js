@@ -45,7 +45,7 @@ export default function BottomNavigationComponent() {
         label="Perfil"
         value="perfil"
         icon={<Person />}
-        onClick={() => navigate('/user/'+userID)}
+        onClick={() => navigate('/profile/'+userID)}
         sx={{
           backgroundColor: active === "perfil" && "#36367D",
           color: "#ffffff",

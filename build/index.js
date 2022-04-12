@@ -110,7 +110,24 @@ app_1.default.get("/posts", (req, res) => __awaiter(void 0, void 0, void 0, func
       JOIN Posts 
       ON Posts.userID = Users.id
        ;`);
-        res.send(posts[0]);
+        const skills = yield connection_1.default.raw(`
+      SELECT skill_name, postID
+      FROM Skills
+      LEFT JOIN Posts 
+      ON Posts.post_id = Skills.postID
+      `);
+        const newPosts = posts[0].map((post, i) => {
+            const newSkill = skills[0].filter((skill) => {
+                if (skill.postID === post.post_id) {
+                    return true;
+                }
+            }).map((skill) => {
+                return skill.skill_name;
+            });
+            post = Object.assign(Object.assign({}, post), { tags: newSkill });
+            return post;
+        });
+        res.send(newPosts);
     }
     catch (error) {
         console.log(error.message);
@@ -156,7 +173,7 @@ app_1.default.get("/user/:id/posts", (req, res) => __awaiter(void 0, void 0, voi
       ON Posts.userID = Users.id WHERE id = "${req.params.id}"
        ;`);
         const data = {
-            posts: post[0]
+            posts: post[0],
         };
         res.send(data);
     }
@@ -272,7 +289,7 @@ app_1.default.post("/posts/tag/:postID", (req, res) => __awaiter(void 0, void 0,
     }
 }));
 // Pega skills
-app_1.default.get('/poststags', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app_1.default.get("/poststags", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const skills = yield connection_1.default.raw(`
         SELECT * FROM Skills;
