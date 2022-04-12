@@ -48,3 +48,5 @@ Content-Type: application/json; charset=utf-8
 }
 
 ###
+
+GET http://localhost:3003/user/24/posts

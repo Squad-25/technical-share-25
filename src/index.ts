@@ -147,6 +147,28 @@ app.get("/posts/:id", async (req: Request, res: Response) => {
   }
 })
 
+// Pega posts pelo user_id
+app.get("/user/:id/posts", async (req: Request, res: Response) => {
+  try {
+    const post = await connection.raw(
+      `SELECT id, user_name, photo, post_id, title, body, post_date, votes
+      FROM Users      
+      JOIN Posts 
+      ON Posts.userID = Users.id WHERE id = "${req.params.id}"
+       ;`
+    )
+
+    const data = {
+      posts: post[0]
+    }
+
+    res.send(data)
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+  }
+})
+
 // Cria post
 app.post("/posts", async (req: Request, res: Response) => {
   try {

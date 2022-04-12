@@ -147,6 +147,24 @@ app_1.default.get("/posts/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(500).send("An unexpected error occurred");
     }
 }));
+// Pega posts pelo user_id
+app_1.default.get("/user/:id/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const post = yield connection_1.default.raw(`SELECT id, user_name, photo, post_id, title, body, post_date, votes
+      FROM Users      
+      JOIN Posts 
+      ON Posts.userID = Users.id WHERE id = "${req.params.id}"
+       ;`);
+        const data = {
+            posts: post[0]
+        };
+        res.send(data);
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));
 // Cria post
 app_1.default.post("/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

@@ -54,6 +54,7 @@ const ChipContainer = styled(Box)`
   display: flex;
   flex-wrap: wrap;
   margin-top: 16px;
+  align-self: flex-start;
 `
 
 const Skill = styled(Chip)`

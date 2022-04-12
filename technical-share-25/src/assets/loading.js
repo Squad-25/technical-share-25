@@ -5,7 +5,7 @@ import laranja from './loading-laranja.png'
 const LoadingIcon = styled.img`
 align-self: center;
 justify-self: center;
-width: 40px;
+width: 64px;
   animation: load 1500ms ease infinite;
   @keyframes load {
     from {transform: rotate(0deg)}

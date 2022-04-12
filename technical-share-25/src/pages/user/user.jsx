@@ -8,7 +8,6 @@ import { Chip } from "@mui/material"
 import styled from "@emotion/styled"
 import PhoneIcon from "@mui/icons-material/Phone"
 import MailOutlineIcon from "@mui/icons-material/MailOutline"
-import ProfileCard from "../../components/profile-card/profileCard"
 
 const PageContainer = styledComponents.div`
   display: flex;
@@ -70,6 +69,7 @@ const Triangle = styledComponents.div`
 `
 
 const SkillsContainer = styledComponents.div`
+    align-self: flex-start;
     display: flex;
     flex-wrap: wrap;
     padding: 16px 15%;
@@ -109,7 +109,7 @@ const Skill = styled(Chip)`
 
 function User() {
   const params = useParams()
-  const { data, error, loading } = useRequestData(
+  const { data } = useRequestData(
     BASE_URL + "/users/" + params.id
   )
 
