@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material"
 import React from "react"
-import BottomNavigationComponent from "../../components/BottomNavigationComponent"
+
 
 export default function Home() {
   return (

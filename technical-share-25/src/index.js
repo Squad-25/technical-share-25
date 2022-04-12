@@ -12,6 +12,7 @@ ReactDOM.render(
     <CssBaseline>
     <BrowserRouter>
       <Router />
+      <p></p>
       <BottomNavigationComponent />
     </BrowserRouter>
     </CssBaseline>
