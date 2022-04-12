@@ -1,9 +1,12 @@
-import { Button, FormControl, InputAdornment, TextField } from "@mui/material"
+import { Button, InputAdornment, TextField } from "@mui/material"
 import React, { useState } from "react"
 import styledComponents from "styled-components"
 import styled from "@emotion/styled"
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded"
 import SearchIcon from '@mui/icons-material/Search';
+import axios from "axios"
+import { BASE_URL, userID } from "../../services/urls"
+import { useNavigate } from "react-router-dom"
 
 const PageContainer = styledComponents.div`
   padding: 25px;
@@ -50,6 +53,8 @@ export default function SkillsPrompt() {
   const [input, setInput] = useState("")
   const [userSkills, setUserSkills] = useState([])
 
+  const navigate = useNavigate()
+
   const renderSkills = () => {
     const skillSet = userSkills.map((skill) => {
       return <p>{skill}</p>
@@ -66,7 +71,21 @@ export default function SkillsPrompt() {
     e.preventDefault()
           setUserSkills([...userSkills, input])
           setInput("")
-          console.log(userSkills)
+  }
+  
+  const sendSkills = () => {
+    const request = {
+     skills: userSkills
+    }
+
+    axios.post(BASE_URL + `/skills/${userID}`, request)
+    .then((res) => {
+      alert('Skills adicionadas!')
+      navigate('/')
+    })
+    .catch((err) =>{
+      console.log(err)
+    })
   }
 
   return (
@@ -106,7 +125,7 @@ export default function SkillsPrompt() {
         />
       </PromptContainer>
       {renderSkills()}
-      <ConfirmButton variant="contained" disabled={isDisabled()}>
+      <ConfirmButton variant="contained" disabled={isDisabled()} onClick={sendSkills}>
         Confirmar
       </ConfirmButton>
     </PageContainer>

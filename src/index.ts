@@ -138,7 +138,7 @@ app.get("/posts/:id", async (req: Request, res: Response) => {
       tags: tags[0].map((skill: { skill_name: String }) => {
         return skill.skill_name
       }),
-    }42
+    }
 
     res.send(data)
   } catch (error: any) {
