@@ -48,6 +48,7 @@ const ConfirmButton = styled(Button)`
   width: fit-content;
   align-self: flex-end;
   margin-top: 30px;
+  background: #404099;
 `
 
 const ChipContainer = styled(Box)`
