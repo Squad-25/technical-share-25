@@ -36,7 +36,7 @@ Content-Type: application/json; charset=utf-8
 }
 
 ###
-GET http://localhost:3003/posts/851275da-11b7-4776-97af-2e284695d3ea
+GET http://localhost:3003/posts/04ed1e1b-f130-4401-aed8-aaa2bd673dc1
 
 ###
 POST http://localhost:3003/posts/851275da-11b7-4776-97af-2e284695d3ea/comment

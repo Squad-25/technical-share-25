@@ -1,17 +1,17 @@
-import { Button, Input, TextField } from "@mui/material"
-import React from "react"
+import { Autocomplete, Button, TextField } from "@mui/material"
+import React, { useState } from "react"
 import styledComponents from "styled-components"
 import { useForm } from "../../hooks/useForm"
 import styled from "@emotion/styled"
-import { useNavigate } from "react-router-dom"
 
 const PageContainer = styledComponents.div`
+  padding: 25px;
   display: flex;
   flex-direction: column;
 `
 
-const SkillsInput = styled(TextField)`
-
+const SkillsInput = styled(Autocomplete)`
+  margin-top: 25px;
 `
 
 const PromptContainer = styledComponents.div`
@@ -27,8 +27,12 @@ const PromptContainer = styledComponents.div`
 `
 
 export default function SkillsPrompt() {
+  const {input, setInput} = useState("")
+  const skills = ["123", "1290380"]
+  const userSkills = []
 
-  const {form, handleChange, clearForm} = useForm({skills: ""})
+  const addSkill
+
 
   return (
     <PageContainer>
@@ -36,15 +40,15 @@ export default function SkillsPrompt() {
       <PromptContainer>
         <h5>Selecione suas skills</h5>
         <SkillsInput
-          autoFocus
-          error={false}
-          name="skills"
-          value={form.skills}
-          placeholder="html, css, javascript..."
-          onChange={handleChange}
-          label="Skills"
-          margin="dense"
+        name="skills"
+        value={input}
+        onChange={(e) => setInput(e)}
+          disablePortal
+          options={skills}
+          sx={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="html, css, javascript..." />}
         />
+        <Button onClick={addSkill}>Teste</Button>
       </PromptContainer>
     </PageContainer>
   )
