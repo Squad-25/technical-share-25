@@ -14,7 +14,7 @@ const PageContainer = styledComponents.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottm
+  margin-bottom: 100px;
   h4 {
     font-style: normal;
     font-weight: 400;
