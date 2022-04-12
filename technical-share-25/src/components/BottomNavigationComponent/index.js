@@ -29,12 +29,12 @@ export default function BottomNavigationComponent() {
       className=""
     >
       <BottomNavigationAction
-        label="Consultar"
-        value="consultar"
+        label="Home"
+        value="home"
         icon={<Home />}
         onClick={() => navigate('/')}
         sx={{
-          backgroundColor: active === "consultar" && "#36367D",
+          backgroundColor: active === "home" && "#36367D",
           color: "#ffffff",
           "&.MuiBottomNavigationAction-root.Mui-selected": {
             color: "#ffffff",
