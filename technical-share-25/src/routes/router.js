@@ -1,6 +1,7 @@
 import React from "react"
 import { Route, Routes } from "react-router-dom"
-import AppHome from "../App"
+import Home from "../pages/home"
+import AppHome from "../App.js"
 import Login from "../pages/login"
 import Feed from "../pages/feed"
 import CreateQuestion from "../pages/create-question"

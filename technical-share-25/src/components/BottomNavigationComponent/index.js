@@ -4,7 +4,6 @@ import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 
 import { Home, Person, Leaderboard } from "@mui/icons-material";
 
-
 export default function BottomNavigationComponent() {
     const [value, setValue] = useState('consultar');
 
@@ -23,7 +22,7 @@ export default function BottomNavigationComponent() {
             onChange={(event, value) => {
                 setValue(value);
             }}
-            sx={{ width: 360, backgroundColor: '#404099' }}
+            sx={{ width: 360, backgroundColor: '#404099', position: 'fixed', bottom: '0' }}
             className=""
         >
             <BottomNavigationAction
