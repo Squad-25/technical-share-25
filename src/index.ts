@@ -294,12 +294,16 @@ app.post("/posts/tag/:postID", async (req: Request, res: Response) => {
 })
 
 // Pega skills
-app.get("/poststags", async (req: Request, res: Response) => {
+app.get("/posttags", async (req: Request, res: Response) => {
   try {
     const skills = await connection.raw(`
-        SELECT * FROM Skills;
+        SELECT DISTINCT skill_name FROM Skills;
         `)
-    res.send(skills[0])
+    const tags = skills[0].map((skill: any) => {
+      return skill.skill_name
+    })
+
+    res.send({tags: tags})
   } catch (error: any) {
     console.log(error.message)
     res.status(500).send("An unexpected error occurred")
