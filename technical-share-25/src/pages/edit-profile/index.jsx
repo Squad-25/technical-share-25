@@ -1,5 +1,5 @@
 import { Button, Chip, InputAdornment, TextField } from "@mui/material"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import styledComponents from "styled-components"
 import styled from "@emotion/styled"
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded"
@@ -9,11 +9,14 @@ import { BASE_URL, userID } from "../../services/urls"
 import { useNavigate } from "react-router-dom"
 import { Box } from "@mui/system"
 import { useForm } from "../../hooks/useForm"
+import useRequestData from "../../hooks/useRequestData"
+import Loading from "../../assets/loading"
 
 const PageContainer = styledComponents.div`
   padding: 25px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 100px;
   h6{
     font-style: normal;
     font-weight: 700;
@@ -39,8 +42,7 @@ const ButtonContainer = styled(Box)`
 `
 
 const ConfirmButton = styled(Button)`
-  width: fit-content;
-  background: #404099;
+  width: 80%;
 `
 
 const ChipContainer = styled(Box)`
@@ -48,6 +50,13 @@ const ChipContainer = styled(Box)`
   flex-wrap: wrap;
   margin-top: 16px;
   align-self: flex-start;
+`
+
+const ProfilePic = styledComponents.img`
+  width: 30%;
+  border-radius: 50%;
+  margin: 22px;
+  align-self: center;
 `
 
 const Skill = styled(Chip)`
@@ -61,11 +70,20 @@ const Skill = styled(Chip)`
   line-height: 14px;
 `
 
-export default function CreatePost() {
-  const { form, handleChange, clearForm } = useForm({ title: "", body: "" })
+export default function EditProfile() {
   const [tags, setTags] = useState("")
   const [userSkills, setUserSkills] = useState([])
-  const [error, setError] = useState({ title: false, body: false, tags: false })
+  const { data } = useRequestData(BASE_URL + "/users/" + userID)
+  const { form, handleChange } = useForm({
+    user_name: "",
+    role: "",
+    phone: "",
+    email: "",
+  })
+
+  useEffect(() => {
+    if (data) setUserSkills(data.skills)
+  }, [data])
 
   const navigate = useNavigate()
 
@@ -94,6 +112,8 @@ export default function CreatePost() {
     else return false
   }
 
+  console.log(data)
+
   const submitSkill = (e) => {
     e.preventDefault()
     if (userSkills.some((skill) => skill === tags)) {
@@ -107,58 +127,65 @@ export default function CreatePost() {
   const submitForm = (e) => {
     e.preventDefault()
 
-    if (form.title === "") {
-      setError({ title: true })
-    } else if (form.body === "") {
-      setError({ body: true })
-    } else if (userSkills === []) {
-      setError({ tags: true })
-    } else if (form.title !== "" && form.body !== "" && userSkills !== []) {
-      const request = {
-        userID: `"${userID}"`,
-        title: form.title,
-        body: form.body,
-        skills: userSkills,
-      }
-
-      axios
-        .post(BASE_URL + `/posts`, request)
-        .then((res) => {
-          alert("Pergunta enviada!")
-          navigate("/")
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+    const request = {
+      user_id: `"${userID}"`,
+      title: form.title,
+      body: form.body,
+      skills: userSkills,
     }
+
+    axios
+      .put(BASE_URL + `/users/` + userID, request)
+      .then((res) => {
+        navigate("/")
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
     <PageContainer>
+      {data ? <ProfilePic src={data.user.photo} /> : <Loading />}
       <SkillsInput
-        required
-        autoFocus
-        inputProps={{ maxlength: 100 }}
-        error={error.title}
-        value={form.title}
-        placeholder="Digite um título para sua pergunta"
+        value={form.user_name}
+        defaultValue={"hahahah"}
+        placeholder={data ? data.user.user_name : "Nome"}
         type="text"
-        name="title"
+        name="user_name"
+        label="Nome"
+        InputLabelProps={{ shrink: "true" }}
         onChange={handleChange}
-        label="Título"
         margin="dense"
       />
       <SkillsInput
-        multiline
-        required
-        rows={4}
-        error={error.body}
-        value={form.body}
-        placeholder="Descreva sua dúvida"
+        value={form.role}
+        placeholder={data ? data.user.role : "Cargo"}
         type="text"
-        name="body"
+        InputLabelProps={{ shrink: "true" }}
+        label="Cargo"
+        name="role"
         onChange={handleChange}
-        label="Descrição"
+        margin="dense"
+      />
+      <SkillsInput
+        value={form.phone}
+        placeholder={data ? data.user.phone : "Telefone"}
+        InputLabelProps={{ shrink: "true" }}
+        label="Telefone"
+        type="phone"
+        name="phone"
+        onChange={handleChange}
+        margin="dense"
+      />
+      <SkillsInput
+        value={form.email}
+        placeholder={data ? data.user.email : "E-mail"}
+        type="text"
+        name="email"
+        onChange={handleChange}
+        InputLabelProps={{ shrink: "true" }}
+        label="E-mail"
         margin="dense"
       />
       <PromptContainer
@@ -168,14 +195,12 @@ export default function CreatePost() {
         }}
       >
         <SkillsInput
-          required
-          error={error.tags}
           value={tags}
-          placeholder="Digite uma tag"
+          placeholder="Digite uma skill"
           type="text"
-          name="Tags"
+          name="skills"
           onChange={(e) => setTags(e.target.value)}
-          label="Tags"
+          label="Skills"
           margin="dense"
           InputProps={{
             endAdornment: tags ? (
@@ -192,22 +217,12 @@ export default function CreatePost() {
       </PromptContainer>
       <ChipContainer>{renderSkills()}</ChipContainer>
       <ButtonContainer>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            clearForm()
-            setTags("")
-            setUserSkills([])
-          }}
-        >
-          Cancelar
-        </Button>
         <ConfirmButton
           variant="contained"
           disabled={isDisabled()}
           onClick={submitForm}
         >
-          Confirmar
+          Salvar alterações
         </ConfirmButton>
       </ButtonContainer>
     </PageContainer>

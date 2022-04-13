@@ -1,13 +1,14 @@
 import React from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import useRequestData from "../../hooks/useRequestData"
-import { BASE_URL } from "../../services/urls"
+import { BASE_URL, userID } from "../../services/urls"
 import Loading from "../../assets/loading"
 import styledComponents from "styled-components"
 import { Chip } from "@mui/material"
 import styled from "@emotion/styled"
 import PhoneIcon from "@mui/icons-material/Phone"
 import MailOutlineIcon from "@mui/icons-material/MailOutline"
+import EditIcon from '@mui/icons-material/Edit';
 
 const PageContainer = styledComponents.div`
   display: flex;
@@ -20,6 +21,8 @@ const PageContainer = styledComponents.div`
     font-size: 34px;
     line-height: 36px;
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
   }
   h6 {
     font-style: normal;
@@ -41,6 +44,12 @@ const PageContainer = styledComponents.div`
   .contato{
       margin-bottom: 12px;
   }
+  .icon{
+    color: #A8A8D1;
+    cursor: pointer;
+    font-size: 30px;
+    margin-left:  5px;
+  }
 `
 
 const PostsContainer = styledComponents.div`
@@ -57,7 +66,7 @@ const RankContainer = styledComponents.div`
   margin: 30px 0 22px 0;
   background: #e8eaf6;
   border-radius: 4px;
-  width: 90%;
+  width: 84%;
   text-align: center;
   padding: 8px;
 `
@@ -117,8 +126,9 @@ const Skill = styled(Chip)`
 `
 
 function UserProfile() {
-  const params = useParams()
-  const { data } = useRequestData(BASE_URL + "/users/" + params.id)
+  const { data } = useRequestData(BASE_URL + "/users/" + userID)
+
+  const navigate = useNavigate()
 
   const renderSkills = () => {
     const skillSet = data.skills.map((skill) => {
@@ -132,7 +142,7 @@ function UserProfile() {
       return (
         <PageContainer>
           <ProfilePic src={data.user.photo} />
-          <h4>{data.user.user_name}</h4>
+          <h4>{data.user.user_name} <EditIcon className="icon" onClick={() => navigate('/profile/edit')}/></h4>
           <h6>{data.user.role}</h6>
           <RankContainer>
             <div>

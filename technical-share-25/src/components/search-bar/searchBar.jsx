@@ -56,6 +56,7 @@ export default function SearchBar(props) {
     const skillSet = searchSkills.map((skill) => {
       return (
         <Skill
+          color="primary"
           key={skill}
           id={skill}
           label={skill}
@@ -77,11 +78,17 @@ export default function SearchBar(props) {
       setInput("")
     } else {
       setSearchSkills([...searchSkills, input])
-      setInput("")}
+      setInput("")
+    }
   }
 
   return (
-    <PromptContainer type="submit" onSubmit={(e) => {submitSkill(e)}}>
+    <PromptContainer
+      type="submit"
+      onSubmit={(e) => {
+        submitSkill(e)
+      }}
+    >
       <SkillsInput
         autoFocus
         error={false}
@@ -100,7 +107,7 @@ export default function SearchBar(props) {
           ),
         }}
       />
-       <ChipContainer>{renderSkills()}</ChipContainer>
+      <ChipContainer>{renderSkills()}</ChipContainer>
     </PromptContainer>
   )
 }
