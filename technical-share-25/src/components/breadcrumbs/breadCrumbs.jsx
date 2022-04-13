@@ -9,6 +9,13 @@ const Container = styledComponents.div`
  align-items: center;
  align-self: flex-start; 
  font-size: 20px;
+ margin: 16px 32px;
+ p{
+   margin-left: 16px;
+   font-style: normal;
+   font-weight: 500;
+   font-size: 20px;
+ }
 `
 
 export default function BreadCrumbs() {
@@ -17,22 +24,71 @@ export default function BreadCrumbs() {
 
   const path = location.pathname
 
-    const renderComponent = () => {
-      switch (path) {
-        case '/':
-          return <img src={breadcrumbsLogo} alt='technical share'/>
-        case '/profile':
-          return <><ArrowBackIosNewIcon onClick={() => navigate()}/> <p>Meu Perfil</p></>
-        case '/profile/edit':
-          return <><ArrowBackIosNewIcon/> <p>Editar Perfil</p></>
-        case '/rank':
-          return <><ArrowBackIosNewIcon/> <p>Ranking</p></>
-        case '/profile':
-          return <><ArrowBackIosNewIcon/> <p>Meu Perfil</p></>
-      }
+  const Icon = () => {
+    return (
+      <ArrowBackIosNewIcon
+        className="icon"
+        onClick={() => {
+          navigate(-1)
+        }}
+      />
+    )
+  }
+
+  const renderComponent = () => {
+    switch (path) {
+      case "/":
+        return (
+          <Container>
+            <img src={breadcrumbsLogo} alt="technical share" />
+          </Container>
+        )
+      case "/profile":
+        return (
+          <Container>
+            <Icon /> <p>Meu Perfil</p>
+          </Container>
+        )
+      case "/profile/edit":
+        return (
+          <Container>
+            <Icon /> <p>Editar Perfil</p>
+          </Container>
+        )
+      case "/rank":
+        return (
+          <Container>
+            <Icon /> <p>Ranking</p>
+          </Container>
+        )
+      case "/posts/new":
+        return (
+          <Container>
+            <Icon /> <p>Nova Pergunta</p>
+          </Container>
+        )
+      case `/user/*`:
+        return (
+          <Container>
+            <Icon /> <p></p>
+          </Container>
+        )
+      case "/question":
+        return (
+          <Container>
+            <Icon /> <p>Pergunta</p>
+          </Container>
+        )
+      case "/skills-prompt":
+        return (
+          <Container>
+            <Icon /> <p>Skills</p>
+          </Container>
+        )
+      default:
+        return
     }
+  }
 
-
-
-  return <Container>{renderComponent()}</Container>
+  return <>{renderComponent()}</>
 }

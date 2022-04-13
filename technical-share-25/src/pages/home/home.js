@@ -1,6 +1,5 @@
 import BottomNavigationComponent from "../../components/BottomNavigationComponent";
 import { Divider, Typography } from "@mui/material";
-
 import QuestionCard from "../../components/QuestionCard";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
@@ -48,9 +47,6 @@ export default function Home() {
 
   return (
     <div className="PageContainer" style={{marginBottom: "140px"}}>
-      <Typography sx={{ fontSize: '24px', fontWeight: 700 }}>
-        Technical Share
-      </Typography>
 
       <TogglePeoplePost />
 
