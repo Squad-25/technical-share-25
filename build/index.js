@@ -116,7 +116,7 @@ app_1.default.get("/posts", (req, res) => __awaiter(void 0, void 0, void 0, func
       LEFT JOIN Posts 
       ON Posts.post_id = Skills.postID
       `);
-        const newPosts = posts[0].map((post, i) => {
+        const newPosts = posts[0].map((post) => {
             const newSkill = skills[0].filter((skill) => {
                 if (skill.postID === post.post_id) {
                     return true;

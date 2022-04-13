@@ -48,5 +48,4 @@ Content-Type: application/json; charset=utf-8
 }
 
 ###
-
-GET http://localhost:3003/posttags
+GET http://localhost:3003/posts

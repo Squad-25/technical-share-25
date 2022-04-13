@@ -45,12 +45,10 @@ const PageContainer = styledComponents.div`
 
 const PostsContainer = styledComponents.div`
     display: flex;
-    justify-content: space-around;
-    margin: 30px 0 22px 0;
-    border-radius: 4px;
-    width: 90%;
-    text-align: center;
-    padding: 8px;
+    flex-direction: column;
+    margin-top: 16px;
+    align-self: flex-start;
+    width: 100%;
 `
 
 const RankContainer = styledComponents.div`
@@ -104,6 +102,7 @@ const LoadingContainer = styledComponents.div`
     flex-direction: column;
     align-content: center;
     justify-content: center;
+    align-items: center;
 `
 
 const Skill = styled(Chip)`
@@ -159,10 +158,12 @@ function UserProfile() {
             <MailOutlineIcon />
             <a href={`mailto:${data.user.email}`}>{data.user.email}</a>
           </ContactContainer>
-          <PostsContainer></PostsContainer>
+          <PostsContainer>
+            <h7>Minhas Perguntas</h7>
+          </PostsContainer>
         </PageContainer>
       )
-    } else return <h1>Ops! Perfil não encontrado</h1>
+    } else return <LoadingContainer><h2>Ops! Perfil não encontrado</h2></LoadingContainer>
   }
 
   return (
