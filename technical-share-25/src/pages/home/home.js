@@ -2,6 +2,7 @@ import BottomNavigationComponent from "../../components/BottomNavigationComponen
 import { Divider, Typography } from "@mui/material";
 
 import QuestionCard from "../../components/QuestionCard";
+import ProfileCard from "../../components/profile-card/profileCard";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import TogglePeoplePost from "../../components/TogglePeoplePost";
@@ -11,40 +12,66 @@ import HomeFab from "../../components/home-fab";
 
 export default function Home() {
   const [posts, setPosts] = useState([{ postId: '' }]); //ids de todas perguntas para pesquisar no banco
+  const [mentors, setMentors] = useState([{ mentorId: '' }]);
 
+  const [toggle, setToggle] = useState('pessoas');
   const [skillsNamesSelected, SetSkillsNamesSelected] = useState([]);
 
   useEffect(() => {
 
-    async function fetchAllPosts() {
-      try {
-        const { data } = await api.get('posts');
+    toggle === 'pessoas' ? fetchAllMentors() : fetchAllPosts();
 
-        const postsFormatted = skillsNamesSelected.length === 0 ?
-          data.map(post => { return { postId: post.post_id } })
-          :
-          data.map(post => {
-            const postHasWantedSkill = post.tags.some(tag => skillsNamesSelected.includes(tag));
-            if (postHasWantedSkill) {
-              return { postId: post.post_id }
-            } else {
-              return { postId: null }
-            }
+  }, [skillsNamesSelected, toggle]);
+
+  async function fetchAllMentors() {
+    try {
+      const { data } = await api.get('users');
+
+      const mentorsFormatted = skillsNamesSelected.length === 0 ?
+        data.map(mentor => { return { mentorId: mentor.id } })
+        :
+        data.map(mentor => {
+          const mentorHasWantedSkill = mentor.tags.some(tag => skillsNamesSelected.includes(tag));
+          if (mentorHasWantedSkill) {
+            return { mentorId: mentor.id }
+          } else {
+            return { mentorId: null }
           }
-          ).filter(post => post.postId != null);
+        }
+        ).filter(mentor => mentor.mentorId != null);
 
-        console.log('posts pesquisados:', postsFormatted);
+      console.log('mentors pesquisados:', mentorsFormatted);
 
-        setPosts(postsFormatted);
-      } catch (error) {
-        console.log(error.message);
-      }
+      setMentors(mentorsFormatted);
+    } catch (error) {
+      console.log(error.message);
     }
+  }
 
-    fetchAllPosts();
+  async function fetchAllPosts() {
+    try {
+      const { data } = await api.get('posts');
 
+      const postsFormatted = skillsNamesSelected.length === 0 ?
+        data.map(post => { return { postId: post.post_id } })
+        :
+        data.map(post => {
+          const postHasWantedSkill = post.tags.some(tag => skillsNamesSelected.includes(tag));
+          if (postHasWantedSkill) {
+            return { postId: post.post_id }
+          } else {
+            return { postId: null }
+          }
+        }
+        ).filter(post => post.postId != null);
 
-  }, [skillsNamesSelected]);
+      console.log('posts pesquisados:', postsFormatted);
+
+      setPosts(postsFormatted);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   return (
     <div className="PageContainer">
@@ -52,7 +79,7 @@ export default function Home() {
         Technical Share
       </Typography>
 
-      <TogglePeoplePost />
+      <TogglePeoplePost toggle={toggle} setToggle={setToggle} />
 
       <SearchBar skills={skillsNamesSelected} setSkills={SetSkillsNamesSelected} />
 
@@ -61,10 +88,16 @@ export default function Home() {
       <Typography sx={{ fontSize: '16px', marginBottom: '16px' }}>
         Resultados
       </Typography>
+
       {
-        posts.map(post => (
-          <QuestionCard key={post.postId} postId={post.postId} />
-        ))
+        toggle === 'pessoas' ?
+          mentors.map(mentor => (
+            <ProfileCard key={mentor.mentorId} mentorId={mentor.mentorId} />
+          ))
+          :
+          posts.map(post => (
+            <QuestionCard key={post.postId} postId={post.postId} />
+          ))
       }
 
       <BottomNavigationComponent />

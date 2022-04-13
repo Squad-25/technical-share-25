@@ -1,7 +1,7 @@
 import React from "react"
 import styledComponents from "styled-components"
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import breadcrumbsLogo from "../../assets/breadcrumbs-logo.png"
 
 const Container = styledComponents.div`
@@ -17,20 +17,20 @@ export default function BreadCrumbs() {
 
   const path = location.pathname
 
-    const renderComponent = () => {
-      switch (path) {
-        case '/':
-          return <img src={breadcrumbsLogo} alt='technical share'/>
-        case '/profile':
-          return <><ArrowBackIosNewIcon onClick={navigate()}/> <p>Meu Perfil</p></>
-        case '/profile/edit':
-          return <><ArrowBackIosNewIcon/> <p>Editar Perfil</p></>
-        case '/rank':
-          return <><ArrowBackIosNewIcon/> <p>Ranking</p></>
-        case '/profile':
-          return <><ArrowBackIosNewIcon/> <p>Meu Perfil</p></>
-      }
+  const renderComponent = () => {
+    switch (path) {
+      case '/':
+        return <img src={breadcrumbsLogo} alt='technical share' />
+      case '/profile':
+        return <><ArrowBackIosNewIcon onClick={navigate()} /> <p>Meu Perfil</p></>
+      case '/profile/edit':
+        return <><ArrowBackIosNewIcon /> <p>Editar Perfil</p></>
+      case '/rank':
+        return <><ArrowBackIosNewIcon /> <p>Ranking</p></>
+      case '/profile':
+        return <><ArrowBackIosNewIcon /> <p>Meu Perfil</p></>
     }
+  }
 
 
 

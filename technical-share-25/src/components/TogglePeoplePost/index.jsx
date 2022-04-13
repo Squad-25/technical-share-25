@@ -1,8 +1,7 @@
 import { ToggleButton, ToggleButtonGroup } from "@mui/material"
 import { useState } from "react"
 
-export default function TogglePeoplePost() {
-    const [toggle, setToggle] = useState('pessoas')
+export default function TogglePeoplePost({ toggle, setToggle }) {
 
     return (
         <ToggleButtonGroup

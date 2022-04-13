@@ -1,8 +1,9 @@
 import styled from "@emotion/styled"
 import { Chip } from "@mui/material"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styledComponents from "styled-components"
+import api from "../../services/api"
 
 const CardContainer = styledComponents.div`
   display: flex;
@@ -55,14 +56,48 @@ const SkillsContainer = styledComponents.div`
     padding: 0 8px;
 `
 
-export default function ProfileCard(props) {
+export default function ProfileCard({ mentorId }) {
+  const [mentor, setMentor] = useState({
+    name: '',
+    role: '',
+    photo: ''
+  })
+
+  const [tags, setTags] = useState([]);
 
   const navigate = useNavigate()
 
-  const renderSkills = () => {
-    if (props.skills.length > 3) props.skills.length = 3
+  useEffect(() => {
+    async function fetchMentor() {
 
-    const skillset = props.skills.map((skill) => {
+      try {
+        const response = await api.get(`users/${mentorId}`);
+        const { data } = response;
+
+        const mentor = {
+          title: data.user.user_name,
+          role: data.user.role,
+          photo: data.user.photo,
+        }
+
+        const tags = data.skills;
+
+        setMentor(mentor);
+        setTags(tags);
+
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+
+    fetchMentor();
+
+  }, [])
+
+  const renderSkills = () => {
+    if (tags.length > 3) tags.length = 3
+
+    const skillset = tags.map((skill) => {
       return <Skill key={skill} id={skill} label={skill} />
     })
 
@@ -70,15 +105,15 @@ export default function ProfileCard(props) {
   }
 
   return (
-    <CardContainer onClick={() => navigate('/user/'+props.id)}>
+    <CardContainer onClick={() => navigate('/user/' + mentorId)}>
       <InfoContainer>
-        <img src={props.photo} alt={`${props.user_name} profile`} />
+        <img src={mentor.photo} alt={`${mentor.user_name} profile`} />
         <div>
-          <h6>{props.user_name}</h6>
-          <h7>{props.role}</h7>
+          <h6>{mentor.user_name}</h6>
+          <h7>{mentor.role}</h7>
         </div>
       </InfoContainer>
-      <SkillsContainer>{props.skills ? renderSkills() : <></>}</SkillsContainer>
+      <SkillsContainer>{tags ? renderSkills() : <></>}</SkillsContainer>
     </CardContainer>
   )
 }
