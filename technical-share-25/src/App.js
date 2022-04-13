@@ -1,17 +1,11 @@
-import "./App.css"
+import Home from "./pages/home/home";
 
 function App() {
-  return <></>
+  return (
+    <>
+      <Home />
+    </>
+  );
 }
 
-export default App
-
-/* 
-
-<Link to="/">
-              <Button className="" variant=''>
-                <Home />
-                Consultar
-              </Button>
-            </Link>
-*/
+export default App;

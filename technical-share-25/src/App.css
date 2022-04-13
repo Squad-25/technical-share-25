@@ -1,14 +1,3 @@
 .App {
   text-align: center;
 }
-
-svg {
-  margin-left: 0.5rem;
-}
-
-.btn-home {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
