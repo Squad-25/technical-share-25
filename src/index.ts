@@ -6,8 +6,29 @@ import { v4 as uuidv4 } from "uuid"
 // Pega users na database
 app.get("/users", async (req, res) => {
   try {
-    const result = await connection.raw("SELECT * FROM Users;")
-    res.send(result[0].length === 1 ? result[0][0] : result[0])
+    const users = await connection.raw("SELECT * FROM Users;")
+    const skills = await connection.raw(`
+    SELECT skill_name, userID
+    FROM Skills
+    LEFT JOIN Users 
+    ON Users.id = Skills.userID
+    `)
+
+  const newUsers = users[0].map((user: any) => {
+    const newSkill = skills[0]
+      .filter((skill: any) => {
+        if (skill.userID === user.id) {
+          return true
+        }
+      })
+      .map((skill: any) => {
+        return skill.skill_name
+      })
+    user = { ...user, tags: newSkill }
+    return user
+  })    
+
+    res.send(newUsers)
   } catch (error: any) {
     res.send(error.message)
   }

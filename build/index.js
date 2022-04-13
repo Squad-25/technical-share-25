@@ -18,8 +18,27 @@ const uuid_1 = require("uuid");
 // Pega users na database
 app_1.default.get("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield connection_1.default.raw("SELECT * FROM Users;");
-        res.send(result[0].length === 1 ? result[0][0] : result[0]);
+        const users = yield connection_1.default.raw("SELECT * FROM Users;");
+        const skills = yield connection_1.default.raw(`
+    SELECT skill_name, userID
+    FROM Skills
+    LEFT JOIN Users 
+    ON Users.id = Skills.userID
+    `);
+        const newUsers = users[0].map((user) => {
+            const newSkill = skills[0]
+                .filter((skill) => {
+                if (skill.userID === user.id) {
+                    return true;
+                }
+            })
+                .map((skill) => {
+                return skill.skill_name;
+            });
+            user = Object.assign(Object.assign({}, user), { tags: newSkill });
+            return user;
+        });
+        res.send(newUsers);
     }
     catch (error) {
         res.send(error.message);
@@ -116,11 +135,13 @@ app_1.default.get("/posts", (req, res) => __awaiter(void 0, void 0, void 0, func
       ON Posts.post_id = Skills.postID
       `);
         const newPosts = posts[0].map((post) => {
-            const newSkill = skills[0].filter((skill) => {
+            const newSkill = skills[0]
+                .filter((skill) => {
                 if (skill.postID === post.post_id) {
                     return true;
                 }
-            }).map((skill) => {
+            })
+                .map((skill) => {
                 return skill.skill_name;
             });
             post = Object.assign(Object.assign({}, post), { tags: newSkill });
@@ -249,20 +270,23 @@ app_1.default.post("/posts/:id/comment", (req, res) => __awaiter(void 0, void 0,
 // Insere Skills User
 app_1.default.post("/skills/:userID", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield connection_1.default.raw(`
+        yield connection_1.default
+            .raw(`
       DELETE FROM Skills WHERE userID = ${req.body.user_id};
-    `);
-        const insert = (skill) => __awaiter(void 0, void 0, void 0, function* () {
-            yield connection_1.default.raw(`
-    INSERT INTO Skills
-       (skill_name, userID)
-    VALUES (
-       "${skill}",
-       ${req.params.userID}
-); `);
-        });
-        req.body.skills.map((skill) => {
-            insert(skill);
+    `)
+            .then(() => {
+            const insert = (skill) => __awaiter(void 0, void 0, void 0, function* () {
+                yield connection_1.default.raw(`
+      INSERT INTO Skills
+         (skill_name, userID)
+      VALUES (
+         "${skill}",
+         ${req.params.userID}
+  ); `);
+            });
+            req.body.skills.map((skill) => {
+                insert(skill);
+            });
         });
         res.status(201).send("Success!");
     }
@@ -307,9 +331,9 @@ app_1.default.get("/posttags", (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 }));
 // Deleta skills
-app_1.default.delete('/skills', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app_1.default.delete("/skills", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.send('Sucess!');
+        res.send("Sucess!");
     }
     catch (error) {
         console.log(error.message);

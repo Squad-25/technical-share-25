@@ -1,4 +1,4 @@
-GET http://localhost:3003/users/24
+GET http://localhost:3003/users
 
 ###
 
