@@ -49,3 +49,11 @@ Content-Type: application/json; charset=utf-8
 
 ###
 GET http://localhost:3003/posts
+
+###
+DELETE http://localhost:3003/skills
+Content-Type: application/json; charset=utf-8
+
+{
+  "user_id": "4"
+}

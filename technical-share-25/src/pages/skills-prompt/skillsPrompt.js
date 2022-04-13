@@ -79,6 +79,7 @@ export default function SkillsPrompt() {
     const skillSet = userSkills.map((skill) => {
       return (
         <Skill
+          color="primary"
           key={skill}
           id={skill}
           label={skill}
@@ -105,7 +106,8 @@ export default function SkillsPrompt() {
       setInput("")
     } else {
       setUserSkills([...userSkills, input])
-      setInput("")}
+      setInput("")
+    }
   }
 
   const sendSkills = () => {
