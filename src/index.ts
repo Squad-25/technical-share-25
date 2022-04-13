@@ -111,7 +111,7 @@ app.get("/posts", async (req: Request, res: Response) => {
       ON Posts.post_id = Skills.postID
       `)
 
-    const newPosts = posts[0].map((post: any, i: number) => {
+    const newPosts = posts[0].map((post: any) => {
       const newSkill = skills[0].filter((skill: any) => {
         if (skill.postID === post.post_id) {
           return true

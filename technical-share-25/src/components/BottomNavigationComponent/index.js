@@ -25,7 +25,7 @@ export default function BottomNavigationComponent() {
       onChange={(event, value) => {
         setValue(value)
       }}
-      sx={{position: "fixed", bottom: 0, width: "100vw", backgroundColor: "#404099" }}
+      sx={{position: "fixed", bottom: -1, width: "100vw", backgroundColor: "#404099" }}
       className=""
     >
       <BottomNavigationAction
