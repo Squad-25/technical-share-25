@@ -63,9 +63,8 @@ app.put("/users/:id", async (req: Request, res: Response) => {
     await connection.raw(`
        UPDATE Users
         SET 
-           user_name = "${req.body.name}",
+           user_name = "${req.body.user_name}",
            email = "${req.body.email}",
-           photo = "${req.body.photo}",
            phone = "${req.body.phone}",
            role = "${req.body.role}"
        WHERE id = ${req.params.id}; `)
@@ -112,13 +111,15 @@ app.get("/posts", async (req: Request, res: Response) => {
       `)
 
     const newPosts = posts[0].map((post: any) => {
-      const newSkill = skills[0].filter((skill: any) => {
-        if (skill.postID === post.post_id) {
-          return true
-        }
-      }).map((skill: any) => {
-        return skill.skill_name
-      })
+      const newSkill = skills[0]
+        .filter((skill: any) => {
+          if (skill.postID === post.post_id) {
+            return true
+          }
+        })
+        .map((skill: any) => {
+          return skill.skill_name
+        })
       post = { ...post, tags: newSkill }
       return post
     })
@@ -255,18 +256,27 @@ app.post("/posts/:id/comment", async (req: Request, res: Response) => {
 // Insere Skills User
 app.post("/skills/:userID", async (req: Request, res: Response) => {
   try {
-    const insert = async (skill: { name: string; userID: number }) => {
-      await connection.raw(`
-    INSERT INTO Skills
-       (skill_name, userID)
-    VALUES (
-       "${skill}",
-       ${req.params.userID}
-); `)
-    }
-    req.body.skills.map((skill: { name: string; userID: number }) => {
-      insert(skill)
-    })
+    await connection
+      .raw(
+        `
+      DELETE FROM Skills WHERE userID = ${req.body.user_id};
+    `
+      )
+      .then(() => {
+        const insert = async (skill: { name: string; userID: number }) => {
+          await connection.raw(`
+      INSERT INTO Skills
+         (skill_name, userID)
+      VALUES (
+         "${skill}",
+         ${req.params.userID}
+  ); `)
+        }
+        req.body.skills.map((skill: { name: string; userID: number }) => {
+          insert(skill)
+        })
+      })
+
     res.status(201).send("Success!")
   } catch (error: any) {
     console.log(error.message)
@@ -303,7 +313,17 @@ app.get("/posttags", async (req: Request, res: Response) => {
       return skill.skill_name
     })
 
-    res.send({tags: tags})
+    res.send({ tags: tags })
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).send("An unexpected error occurred")
+  }
+})
+
+// Deleta skills
+app.delete("/skills", async (req: Request, res: Response) => {
+  try {
+    res.send("Sucess!")
   } catch (error: any) {
     console.log(error.message)
     res.status(500).send("An unexpected error occurred")

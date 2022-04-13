@@ -112,8 +112,6 @@ export default function EditProfile() {
     else return false
   }
 
-  console.log(data)
-
   const submitSkill = (e) => {
     e.preventDefault()
     if (userSkills.some((skill) => skill === tags)) {
@@ -128,20 +126,31 @@ export default function EditProfile() {
     e.preventDefault()
 
     const request = {
-      user_id: `"${userID}"`,
-      title: form.title,
-      body: form.body,
-      skills: userSkills,
+      user_name: (form.user_name !== "" ? form.user_name : data.user.user_name),
+      email: (form.email !== "" ? form.email : data.user.email),
+      phone: (form.phone !== "" ? form.phone : data.user.phone),
+      role: (form.role !== "" ? form.role : data.user.role)
     }
+
+    axios
+    .post(BASE_URL + `/skills/${userID}`, {skills: userSkills, user_id: data.user.id})
+    .then((res) => {
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 
     axios
       .put(BASE_URL + `/users/` + userID, request)
       .then((res) => {
-        navigate("/")
+        navigate("/profile")
       })
       .catch((err) => {
         console.log(err)
       })
+
+
+
   }
 
   return (

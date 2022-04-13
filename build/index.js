@@ -73,9 +73,8 @@ app_1.default.put("/users/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
         yield connection_1.default.raw(`
        UPDATE Users
         SET 
-           user_name = "${req.body.name}",
+           user_name = "${req.body.user_name}",
            email = "${req.body.email}",
-           photo = "${req.body.photo}",
            phone = "${req.body.phone}",
            role = "${req.body.role}"
        WHERE id = ${req.params.id}; `);
@@ -250,6 +249,9 @@ app_1.default.post("/posts/:id/comment", (req, res) => __awaiter(void 0, void 0,
 // Insere Skills User
 app_1.default.post("/skills/:userID", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        yield connection_1.default.raw(`
+      DELETE FROM Skills WHERE userID = ${req.body.user_id};
+    `);
         const insert = (skill) => __awaiter(void 0, void 0, void 0, function* () {
             yield connection_1.default.raw(`
     INSERT INTO Skills
@@ -298,6 +300,16 @@ app_1.default.get("/posttags", (req, res) => __awaiter(void 0, void 0, void 0, f
             return skill.skill_name;
         });
         res.send({ tags: tags });
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("An unexpected error occurred");
+    }
+}));
+// Deleta skills
+app_1.default.delete('/skills', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.send('Sucess!');
     }
     catch (error) {
         console.log(error.message);
