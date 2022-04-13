@@ -47,7 +47,7 @@ export default function Home() {
   }, [skillsNamesSelected]);
 
   return (
-    <div className="PageContainer">
+    <div className="PageContainer" style={{marginBottom: "140px"}}>
       <Typography sx={{ fontSize: '24px', fontWeight: 700 }}>
         Technical Share
       </Typography>
