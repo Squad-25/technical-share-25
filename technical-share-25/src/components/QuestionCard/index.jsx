@@ -51,7 +51,7 @@ export default function QuestionCard({ postId, showComments = false }) {
             try {
                 const response = await api.get(`posts/${postId}`);
                 const { data } = response;
-                console.log(data);
+
                 const post = {
                     title: data.post.title,
                     body: data.post.body,
@@ -104,8 +104,8 @@ export default function QuestionCard({ postId, showComments = false }) {
     }
 
     return (
-        <Box sx={{ minWidth: 275, maxWidth: 600 }}>
-            <Card variant="outlined">
+        <Box sx={{ minWidth: 275, maxWidth: 600, margin: '0 auto', marginBottom: '10px' }}>
+            <Card variant="outlined" sx={{ margin: '0 auto' }}>
                 <CardContent>
                     <Typography variant="h6" sx={{}} gutterBottom>
                         {post.title}

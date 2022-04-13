@@ -1,50 +1,38 @@
 import BottomNavigationComponent from "./components/BottomNavigationComponent";
-import { Container, Typography } from "@mui/material";
+import { Container, Divider, Typography } from "@mui/material";
 
 import './App.css'
 import QuestionCard from "./components/QuestionCard";
 import { useEffect, useState } from "react";
 import api from "./services/api";
 import TogglePeoplePost from "./components/TogglePeoplePost";
-
-/* 
-id": 1,
-    "user_name": "francisco kleuvys",
-    "photo": "my_photo",
-    "post_id": "851275da-11b7-4776-97af-2e284695d3ea",
-    "title": "Seletor CSS/jQuery para uma coluna da tabela",
-    "body": "Existe algum seletor CSS ou do jQuery que pegue uma coluna de uma tabela...",
-    "post_date": "2022-04-12T03:01:56.000Z",
-    "votes": 22
-*/
-
-/* 
-
-<ToggleButtonGroup
-  color="primary"
-  value={alignment}
-  exclusive
-  onChange={handleChange}
->
-  <ToggleButton value="web">Web</ToggleButton>
-  <ToggleButton value="android">Android</ToggleButton>
-  <ToggleButton value="ios">iOS</ToggleButton>
-</ToggleButtonGroup>
-
-*/
+import SearchBar from "./components/search-bar/searchBar";
 
 function App() {
-  const [posts, setPosts] = useState([{
-    postId: ''
-  }]);
+  const [posts, setPosts] = useState([{ postId: '' }]); //ids de todas perguntas para pesquisar no banco
+
+  const [skillsNamesSelected, SetSkillsNamesSelected] = useState([]);
 
   useEffect(() => {
 
-    async function fetchAllPostsIds() {
+    async function fetchAllPosts() {
       try {
-        const { data } = await api.get(`posts`);
+        const { data } = await api.get('posts');
 
-        const postsFormatted = data.map(post => { return { postId: post.post_id } });
+        const postsFormatted = skillsNamesSelected.length === 0 ?
+          data.map(post => { return { postId: post.post_id } })
+          :
+          data.map(post => {
+            const postHasWantedSkill = post.tags.some(tag => skillsNamesSelected.includes(tag));
+            if (postHasWantedSkill) {
+              return { postId: post.post_id }
+            } else {
+              return { postId: null }
+            }
+          }
+          ).filter(post => post.postId != null);
+
+        console.log('posts pesquisados:', postsFormatted);
 
         setPosts(postsFormatted);
       } catch (error) {
@@ -52,9 +40,11 @@ function App() {
       }
     }
 
-    fetchAllPostsIds();
+    fetchAllPosts();
 
-  }, []);
+
+  }, [skillsNamesSelected]);
+
 
 
   return (
@@ -66,6 +56,13 @@ function App() {
 
         <TogglePeoplePost />
 
+        <SearchBar skills={skillsNamesSelected} setSkills={SetSkillsNamesSelected} />
+
+        <Divider sx={{ width: '100%', margin: '16px 0' }} />
+
+        <Typography sx={{ fontSize: '16px', marginBottom: '16px' }}>
+          Resultados
+        </Typography>
         {
           posts.map(post => (
             <QuestionCard key={post.postId} postId={post.postId} />
