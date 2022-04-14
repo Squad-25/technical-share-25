@@ -10,12 +10,12 @@ import {
   TextField,
 } from "@mui/material"
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styledComponents from "styled-components"
 import logo from "../../assets/breadcrumbs-logo.svg"
 import { useForm } from "../../hooks/useForm"
-import { BASE_URL } from "../../services/urls"
+import { BASE_URL, userID } from "../../services/urls"
 import Loading from '../../assets/loading'
 
 const PageContainer = styledComponents.form`
@@ -76,6 +76,10 @@ export default function Login() {
   const [error, setError] = useState(false)
  
   const navigate = useNavigate()
+
+ useEffect(() => {
+   if (localStorage.getItem('user_id')) navigate('/home')
+ })
 
   const login = (e) => {
     e.preventDefault()
@@ -149,7 +153,10 @@ export default function Login() {
       >
         {buttonText}
       </Button>
-      <Button variant="contained" color="error" onClick={() => navigate('/profile')}>
+      <Button variant="contained" color="error" onClick={() => {
+        localStorage.setItem('user_id', userID)
+        navigate('/msuserterms')
+        }}>
         Entrar com office 365
       </Button>
       <div className="signup">

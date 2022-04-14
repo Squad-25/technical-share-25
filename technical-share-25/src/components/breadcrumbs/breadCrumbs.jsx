@@ -3,6 +3,8 @@ import styledComponents from "styled-components"
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
 import { useLocation, useNavigate } from "react-router-dom"
 import breadcrumbsLogo from "../../assets/breadcrumbs-logo.svg"
+import styled from "@emotion/styled"
+import { Button } from "@mui/material"
 
 const Container = styledComponents.div`
  display: flex;
@@ -19,6 +21,11 @@ const Container = styledComponents.div`
  img {
    width: 206px;
  }
+`
+
+const LogoutButton = styled(Button)`
+  position: absolute;
+ right: 0;
 `
 
 export default function BreadCrumbs() {
@@ -40,10 +47,18 @@ export default function BreadCrumbs() {
 
   const renderComponent = () => {
     switch (path) {
-      case "/":
+      case "/home":
         return (
           <Container>
             <img src={breadcrumbsLogo} alt="technical share" />
+            <LogoutButton
+            onClick={() => {
+              localStorage.clear()
+              navigate("/")
+            }}
+          >
+            Logout
+          </LogoutButton>
           </Container>
         )
       case "/profile":
