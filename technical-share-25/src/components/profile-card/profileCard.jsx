@@ -72,6 +72,8 @@ export default function ProfileCard({ mentorId }) {
 
   const [tags, setTags] = useState([]);
 
+  const numberOfSkillsToRender = 3;
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -102,8 +104,13 @@ export default function ProfileCard({ mentorId }) {
   }, [])
 
   const renderSkills = () => {
-    const skillset = tags.map((skill) => {
-      return <Skill key={skill} id={skill} label={skill} />
+
+    const skillset = tags.map((skill, index) => {
+      if (index < numberOfSkillsToRender) {
+        return <Skill key={skill} id={skill} label={skill} />
+      } else {
+        return <></>
+      }
     })
 
     return skillset
