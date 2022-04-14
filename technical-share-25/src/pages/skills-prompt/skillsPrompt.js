@@ -116,8 +116,6 @@ export default function SkillsPrompt() {
       skills: userSkills,
     }
 
-console.log(request)
-
     axios
       .post(BASE_URL + `/skills/${userID}`, request)
       .then(() => {

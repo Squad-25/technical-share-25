@@ -1,8 +1,7 @@
 import React from "react"
 import styledComponents from "styled-components"
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
-import { useLocation, useNavigate } from "react-router-dom"
-import breadcrumbsLogo from "../../assets/breadcrumbs-logo.png"
+import { useNavigate } from "react-router-dom"
 
 const Container = styledComponents.div`
  display: flex;
@@ -19,7 +18,6 @@ const Container = styledComponents.div`
 `
 
 export default function BreadCrumbProfile(props) {
-  const location = useLocation()
   const navigate = useNavigate()
 
   const Icon = () => {
