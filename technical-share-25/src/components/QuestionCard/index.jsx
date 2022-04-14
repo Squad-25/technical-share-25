@@ -17,10 +17,10 @@ import styled from '@emotion/styled';
 const Skill = styled(Chip)`
 margin: 0 4px 8px 0;
 width: fit-content;
-background-color: #ba3300;
-color: #ffffff;
+background-color: #fbe9e7;
+color: #000000de;
 font-style: normal;
-font-weight: 700;
+font-weight: 400;
 font-size: 12px;
 line-height: 14px;
 `
@@ -92,7 +92,6 @@ export default function QuestionCard({ postId, showComments = false }) {
 
             setPost({ ...post, votes: post.votes + 1 });
 
-            console.log('post after voting', post);
         } catch (error) {
             console.log(error.message);
         }
@@ -105,25 +104,23 @@ export default function QuestionCard({ postId, showComments = false }) {
     return (
         <Box sx={{ minWidth: 275, maxWidth: 600, margin: '0 auto', marginBottom: '10px' }}>
             <Card variant="outlined" sx={{ margin: '0 auto' }}>
-                <CardContent>
+                <CardContent sx={{ '&.MuiCardContent-root': { padding: '0 16px' } }}>
                     <Typography variant="h6" sx={{}} gutterBottom>
                         {post.title}
                     </Typography>
                     <Typography paragraph>
                         {post.body}
                     </Typography>
-                    <Stack direction="row" spacing={2}>
+                    <Stack direction="row" spacing={1}>
                         {tags.map(tag => {
                             return (
-
                                 <Skill key={tag} label={tag} />
-
                             )
                         })}
                     </Stack>
                 </CardContent>
-                <CardActions sx={{ display: 'flex', justifyContent: 'space-between', margin: '0 10px' }}>
-                    <Stack direction="row" spacing={2}>
+                <CardActions sx={{ display: 'flex', justifyContent: 'space-between', margin: '0 10px', '&.MuiCardActions-root': { padding: '4px 0px' } }}>
+                    <Stack direction="row" spacing={0}>
                         <Button aria-label="curtir a pergunta" onClick={() => handleUpVote()}>
                             <img src={ArrowUpIcon} alt="curtir a pergunta" />
                             <span style={{ color: '#212121', marginLeft: '10px' }}>{post.votes}</span>

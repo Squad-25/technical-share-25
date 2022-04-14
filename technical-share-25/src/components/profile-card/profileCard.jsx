@@ -5,11 +5,14 @@ import { useNavigate } from "react-router-dom"
 import styledComponents from "styled-components"
 import api from "../../services/api"
 
+import avatar from '../../assets/avatar.svg';
+
 const CardContainer = styledComponents.div`
   display: flex;
   flex-direction: column;
   width: 312px;
-  height: 124px;
+  height: fit-content;
+  padding: 12px;
   border: 1px solid #a8a8d1;
   border-radius: 4px;
   margin: 8px;
@@ -18,30 +21,34 @@ const CardContainer = styledComponents.div`
 
 const InfoContainer = styledComponents.div`
   display: flex;
-  margin: 16px;
+  margin-bottom: 20px;
   img {
-    width: 40px;
-    height: 40px;
+    width: 46px;
+    height: 46px;
     border-radius: 20px;
   }
-  div{
-    margin-left: 16px;
-  }
-  h6{
+  .mentor-name{
     font-weight: 500;
     font-size: 20px;
     font-style: normal;
+    margin: 0 !important;
   }
-  h7{
+  .mentor-role{
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    margin: 0;
+    margin: 0 !important;
   }
 `
 
+const HeaderProfile = styledComponents.div`
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
 const Skill = styled(Chip)`
-  margin: 0 4px 8px 0;
   width: fit-content;
   background-color: #fbe9e7;
   color: #000000de;
@@ -53,7 +60,7 @@ const Skill = styled(Chip)`
 const SkillsContainer = styledComponents.div`
     display: flex;
     flex-wrap: wrap;
-    padding: 0 8px;
+    gap: 8px;
 `
 
 export default function ProfileCard({ mentorId }) {
@@ -75,7 +82,7 @@ export default function ProfileCard({ mentorId }) {
         const { data } = response;
 
         const mentor = {
-          title: data.user.user_name,
+          name: data.user.user_name,
           role: data.user.role,
           photo: data.user.photo,
         }
@@ -95,7 +102,7 @@ export default function ProfileCard({ mentorId }) {
   }, [])
 
   const renderSkills = () => {
-    if (tags.length > 3) tags.length = 3
+    //if (tags.length > 3) tags.length = 3
 
     const skillset = tags.map((skill) => {
       return <Skill key={skill} id={skill} label={skill} />
@@ -107,11 +114,13 @@ export default function ProfileCard({ mentorId }) {
   return (
     <CardContainer onClick={() => navigate('/user/' + mentorId)}>
       <InfoContainer>
-        <img src={mentor.photo} alt={`${mentor.user_name} profile`} />
-        <div>
-          <h6>{mentor.user_name}</h6>
-          <h7>{mentor.role}</h7>
-        </div>
+        <HeaderProfile>
+          <img src={avatar} alt={`${mentor.name} profile`} />
+          <div style={{ height: '48px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginLeft: '16px' }}>
+            <p className="mentor-name">{mentor.name}</p>
+            <p className="mentor-role">{mentor.role}</p>
+          </div>
+        </HeaderProfile>
       </InfoContainer>
       <SkillsContainer>{tags ? renderSkills() : <></>}</SkillsContainer>
     </CardContainer>
