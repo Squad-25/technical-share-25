@@ -362,7 +362,6 @@ app.post("/login", async (req: Request, res: Response) => {
     `
       )
       .then((response) => {
-        console.log(response[0])
         let checkLogin = false
         let userID
         response[0].forEach((user: any) => {
@@ -377,7 +376,6 @@ app.post("/login", async (req: Request, res: Response) => {
           }
         })
         if (checkLogin) {
-          console.log('entrei')
           res.send(userID)
         } else throw new Error("Dados incorretos")
       })

@@ -16,8 +16,9 @@ import styledComponents from "styled-components"
 import logo from "../../assets/breadcrumbs-logo.svg"
 import { useForm } from "../../hooks/useForm"
 import { BASE_URL } from "../../services/urls"
+import Loading from '../../assets/loading'
 
-const PageContainer = styledComponents.div`
+const PageContainer = styledComponents.form`
     display: flex;
     flex-direction: column;
     padding: 24px;
@@ -71,25 +72,34 @@ const EditFormControl = styled(FormControl)`
 export default function Login() {
   const { form, handleChange } = useForm({ email: "", password: "" })
   const [showPassword, setShowPassword] = useState("password")
-
+  const [buttonText, setButtonText] = useState('Entrar')
+  const [error, setError] = useState(false)
+ 
   const navigate = useNavigate()
 
-  const login = () => {
+  const login = (e) => {
+    e.preventDefault()
+    setButtonText(<Loading onButton/>)
     axios
-      .post('http://localhost:3003/login', form)
+      .post(BASE_URL + '/login', form)
       .then((res) => {
         localStorage.setItem('user_id', res.data.user_id)
         navigate("/")
       })
-      .catch((err) => alert('errou' + err.message))
+      .catch((err) => {
+    setButtonText('Entrar')
+    setError(true)
+        alert('Email ou senha incorretos')
+      })
   }
 
   return (
-    <PageContainer>
+    <PageContainer type='submit' onSubmit={(e) => login(e)}>
       <img src={logo} alt="logo" />
       <h1>Login</h1>
       <EditInput
         required
+        error={error}
         value={form.email}
         placeholder="nome@email.com"
         label="email"
@@ -101,6 +111,7 @@ export default function Login() {
       <EditFormControl sx={{ marginTop: 1.1 }} variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">Senha *</InputLabel>
         <OutlinedInput
+        error={error}
           id="outlined-adornment-password"
           required
           value={form.password}
@@ -129,13 +140,14 @@ export default function Login() {
       </EditFormControl>
       <p className="forgot" onClick={() => navigate("/")}>Esqueceu sua senha?</p>
       <Button
+      type="submit"
         className="loginButton"
         variant="contained"
-        onClick={() => {
-          login()
+        onClick={(e) => {
+          login(e)
         }}
       >
-        Entrar
+        {buttonText}
       </Button>
       <Button variant="contained" color="error" onClick={() => navigate('/profile')}>
         Entrar com office 365

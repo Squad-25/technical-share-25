@@ -6,10 +6,10 @@ POST http://localhost:3003/users
 Content-Type: application/json; charset=utf-8
 
 {
-  "name": "Carlos Cleiton",
-  "email": "carlos@cleiton.com",
+  "name": "Larry Gotto",
+  "email": "leo@leo.com",
   "password": "123456",
-  "photo": "https://avatars.githubusercontent.com/u/61395996?v=4",
+  "photo": "https://avatars.githubusercontent.com/u/92735047?v=4",
   "phone": "(11) 99999-0000",
   "role": "UX"
 }
@@ -48,7 +48,7 @@ Content-Type: application/json; charset=utf-8
 }
 
 ###
-GET http://localhost:3003/posts
+GET http://localhost:3003/posts/
 
 ###
 DELETE http://localhost:3003/skills

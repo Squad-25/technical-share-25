@@ -10,7 +10,7 @@ import PhoneIcon from "@mui/icons-material/Phone"
 import MailOutlineIcon from "@mui/icons-material/MailOutline"
 import EditIcon from "@mui/icons-material/Edit"
 import axios from "axios"
-import QuestionCard from '../../components/QuestionCard'
+import QuestionCard from "../../components/QuestionCard"
 
 const PageContainer = styledComponents.div`
   display: flex;
@@ -137,10 +137,12 @@ const Skill = styled(Chip)`
 
 function UserProfile() {
   const { data } = useRequestData(BASE_URL + "/users/" + userID)
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState()
 
   useEffect(() => {
-    axios.get(BASE_URL + "/posts").then((res) => setPosts(res.data))
+    axios
+      .get(BASE_URL + "/user/" + userID + "/posts")
+      .then((res) => setPosts(res.data))
   }, [])
 
   const navigate = useNavigate()
@@ -153,8 +155,13 @@ function UserProfile() {
   }
 
   const renderPosts = () => {
-    const postFeed = posts?.map((post) => {
-      return <QuestionCard postId={post.post_id}/>})
+    const postFeed = posts ? (
+      posts.posts.map((post) => {
+        return <QuestionCard postId={post.post_id} />
+      })
+    ) : (
+      <></>
+    )
 
     return postFeed
   }
@@ -198,7 +205,7 @@ function UserProfile() {
           </ContactContainer>
           <PostsContainer>
             <h5>Minhas Perguntas</h5>
-            <span/>
+            <span />
             {renderPosts()}
           </PostsContainer>
         </PageContainer>
