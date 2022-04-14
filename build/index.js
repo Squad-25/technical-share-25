@@ -340,3 +340,35 @@ app_1.default.delete("/skills", (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(500).send("An unexpected error occurred");
     }
 }));
+// Faz login
+app_1.default.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield connection_1.default
+            .raw(`
+    SELECT * FROM Users;
+    `)
+            .then((response) => {
+            console.log(response[0]);
+            let checkLogin = false;
+            let userID;
+            response[0].forEach((user) => {
+                console.log(req.body);
+                if (user.email === req.body.email &&
+                    user.password === req.body.password) {
+                    checkLogin = true;
+                    userID = { user_id: user.id };
+                }
+            });
+            if (checkLogin) {
+                console.log('entrei');
+                res.send(userID);
+            }
+            else
+                throw new Error("Dados incorretos");
+        });
+    }
+    catch (error) {
+        console.log("errou");
+        res.status(500).send(error.message);
+    }
+}));

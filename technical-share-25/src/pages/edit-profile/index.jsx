@@ -30,7 +30,7 @@ const PromptContainer = styledComponents.form`
   flex-direction: column;
 `
 
-const SkillsInput = styled(TextField)`
+const EditInput = styled(TextField)`
   margin-top: 8px;
 `
 
@@ -134,7 +134,7 @@ export default function EditProfile() {
 
     axios
     .post(BASE_URL + `/skills/${userID}`, {skills: userSkills, user_id: data.user.id})
-    .then((res) => {
+    .then(() => {
     })
     .catch((err) => {
       console.log(err)
@@ -142,23 +142,19 @@ export default function EditProfile() {
 
     axios
       .put(BASE_URL + `/users/` + userID, request)
-      .then((res) => {
+      .then(() => {
         navigate("/profile")
       })
       .catch((err) => {
         console.log(err)
       })
-
-
-
   }
 
   return (
     <PageContainer>
       {data ? <ProfilePic src={data.user.photo} /> : <Loading />}
-      <SkillsInput
+      <EditInput
         value={form.user_name}
-        defaultValue={"hahahah"}
         placeholder={data ? data.user.user_name : "Nome"}
         type="text"
         name="user_name"
@@ -167,33 +163,33 @@ export default function EditProfile() {
         onChange={handleChange}
         margin="dense"
       />
-      <SkillsInput
+      <EditInput
         value={form.role}
         placeholder={data ? data.user.role : "Cargo"}
         type="text"
-        InputLabelProps={{ shrink: "true" }}
+        InputLabelProps={{ shrink: true }}
         label="Cargo"
         name="role"
         onChange={handleChange}
         margin="dense"
       />
-      <SkillsInput
+      <EditInput
         value={form.phone}
         placeholder={data ? data.user.phone : "Telefone"}
-        InputLabelProps={{ shrink: "true" }}
+        InputLabelProps={{ shrink: true }}
         label="Telefone"
         type="phone"
         name="phone"
         onChange={handleChange}
         margin="dense"
       />
-      <SkillsInput
+      <EditInput
         value={form.email}
         placeholder={data ? data.user.email : "E-mail"}
         type="text"
         name="email"
         onChange={handleChange}
-        InputLabelProps={{ shrink: "true" }}
+        InputLabelProps={{ shrink: true }}
         label="E-mail"
         margin="dense"
       />
@@ -203,7 +199,7 @@ export default function EditProfile() {
           submitSkill(e)
         }}
       >
-        <SkillsInput
+        <EditInput
           value={tags}
           placeholder="Digite uma skill"
           type="text"

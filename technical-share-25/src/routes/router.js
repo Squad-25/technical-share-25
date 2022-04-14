@@ -10,12 +10,14 @@ import Rank from "../pages/rank"
 import SkillsPrompt from "../pages/skills-prompt/skillsPrompt"
 import NotFound from "../pages/404"
 import Home from "../pages/home/home"
+import Msuserterms from "../pages/login/msuserterms"
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/msuserterms" element={<Msuserterms/>}/>
       <Route path="/posts/new" element={<CreateQuestion />} />
       <Route path="/profile/" element={<UserProfile />} />
       <Route path="/profile/edit" element={<EditProfile />} />

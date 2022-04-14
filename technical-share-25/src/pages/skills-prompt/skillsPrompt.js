@@ -112,13 +112,13 @@ export default function SkillsPrompt() {
 
   const sendSkills = () => {
     const request = {
+      user_id: userID,
       skills: userSkills,
     }
 
     axios
       .post(BASE_URL + `/skills/${userID}`, request)
-      .then((res) => {
-        alert("Skills adicionadas!")
+      .then(() => {
         navigate("/")
       })
       .catch((err) => {

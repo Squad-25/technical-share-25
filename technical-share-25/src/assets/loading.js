@@ -5,7 +5,7 @@ import laranja from './loading-laranja.png'
 const LoadingIcon = styled.img`
 align-self: center;
 justify-self: center;
-width: 64px;
+max-width: ${(props) => props.onButton ? '24px' : '46px'};
   animation: load 1500ms ease infinite;
   @keyframes load {
     from {transform: rotate(0deg)}
@@ -13,10 +13,10 @@ width: 64px;
   }
 `
 
-export default function Loading() {
+export default function Loading(props) {
   return (
     <>
-    <LoadingIcon src={laranja} alt='carregando'/>
+    <LoadingIcon onButton={props?.onButton} src={laranja} alt='carregando'/>
     </>
   )
 }

@@ -14,19 +14,19 @@ app.get("/users", async (req, res) => {
     ON Users.id = Skills.userID
     `)
 
-  const newUsers = users[0].map((user: any) => {
-    const newSkill = skills[0]
-      .filter((skill: any) => {
-        if (skill.userID === user.id) {
-          return true
-        }
-      })
-      .map((skill: any) => {
-        return skill.skill_name
-      })
-    user = { ...user, tags: newSkill }
-    return user
-  })    
+    const newUsers = users[0].map((user: any) => {
+      const newSkill = skills[0]
+        .filter((skill: any) => {
+          if (skill.userID === user.id) {
+            return true
+          }
+        })
+        .map((skill: any) => {
+          return skill.skill_name
+        })
+      user = { ...user, tags: newSkill }
+      return user
+    })
 
     res.send(newUsers)
   } catch (error: any) {
@@ -348,5 +348,39 @@ app.delete("/skills", async (req: Request, res: Response) => {
   } catch (error: any) {
     console.log(error.message)
     res.status(500).send("An unexpected error occurred")
+  }
+})
+
+// Faz login
+app.post("/login", async (req: Request, res: Response) => {
+  try {
+
+    await connection
+      .raw(
+        `
+    SELECT * FROM Users;
+    `
+      )
+      .then((response) => {
+        let checkLogin = false
+        let userID
+        response[0].forEach((user: any) => {
+          console.log(req.body)
+
+          if (
+            user.email === req.body.email &&
+            user.password === req.body.password
+          ) {
+            checkLogin = true
+            userID = { user_id: user.id }
+          }
+        })
+        if (checkLogin) {
+          res.send(userID)
+        } else throw new Error("Dados incorretos")
+      })
+  } catch (error: any) {
+    console.log("errou")
+    res.status(500).send(error.message)
   }
 })

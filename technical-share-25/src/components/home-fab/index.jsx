@@ -7,7 +7,7 @@ export default function HomeFab() {
   const navigate = useNavigate()
 
   return (
-    <Fab onClick={() => navigate('/posts/new')} variant="extended" size="medium" color="primary" sx={{ background: "#404099"}}aria-label="add">
+    <Fab onClick={() => navigate('/posts/new')} variant="extended" size="medium" color="primary" sx={{ background: "#404099", position: "fixed", right: '4%', bottom: '80px'}}aria-label="add">
       <AddIcon sx={{ mr: 1 }} />
       NOVA PERGUNTA
     </Fab>
