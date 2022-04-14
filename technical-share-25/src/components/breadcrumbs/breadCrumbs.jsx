@@ -6,6 +6,7 @@ import breadcrumbsLogo from "../../assets/breadcrumbs-logo.svg"
 import styled from "@emotion/styled"
 import { Button } from "@mui/material"
 
+
 const Container = styledComponents.div`
  display: flex;
  align-items: center;
@@ -34,6 +35,7 @@ export default function BreadCrumbs() {
 
   const path = location.pathname
 
+
   const Icon = () => {
     return (
       <ArrowBackIosNewIcon
@@ -44,6 +46,7 @@ export default function BreadCrumbs() {
       />
     )
   }
+
 
   const renderComponent = () => {
     switch (path) {
