@@ -8,6 +8,7 @@ import { Chip } from "@mui/material"
 import styled from "@emotion/styled"
 import PhoneIcon from "@mui/icons-material/Phone"
 import MailOutlineIcon from "@mui/icons-material/MailOutline"
+import BreadCrumbProfile from "./breadcrumb"
 
 const PageContainer = styledComponents.div`
 display: flex;
@@ -130,6 +131,8 @@ function User() {
   const renderPage = () => {
     if (data.user) {
       return (
+        <>
+        <BreadCrumbProfile user_name={data?.user.user_name}/>
         <PageContainer>
           <ProfilePic src={data.user.photo} />
           <h4>{data.user.user_name}</h4>
@@ -159,6 +162,7 @@ function User() {
             <a href={`mailto:${data.user.email}`}>{data.user.email}</a>
           </ContactContainer>
         </PageContainer>
+    </>
       )
     } else return <h1>Ops! Perfil não encontrado</h1>
   }

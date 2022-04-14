@@ -16,6 +16,9 @@ const Container = styledComponents.div`
    font-weight: 500;
    font-size: 20px;
  }
+ img {
+   width: 206px;
+ }
 `
 
 export default function BreadCrumbs() {
@@ -65,12 +68,6 @@ export default function BreadCrumbs() {
         return (
           <Container>
             <Icon /> <p>Nova Pergunta</p>
-          </Container>
-        )
-      case `/user/*`:
-        return (
-          <Container>
-            <Icon /> <p></p>
           </Container>
         )
       case "/question":

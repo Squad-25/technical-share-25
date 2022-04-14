@@ -158,7 +158,6 @@ export default function EditProfile() {
       {data ? <ProfilePic src={data.user.photo} /> : <Loading />}
       <SkillsInput
         value={form.user_name}
-        defaultValue={"hahahah"}
         placeholder={data ? data.user.user_name : "Nome"}
         type="text"
         name="user_name"
@@ -171,7 +170,7 @@ export default function EditProfile() {
         value={form.role}
         placeholder={data ? data.user.role : "Cargo"}
         type="text"
-        InputLabelProps={{ shrink: "true" }}
+        InputLabelProps={{ shrink: true }}
         label="Cargo"
         name="role"
         onChange={handleChange}
@@ -180,7 +179,7 @@ export default function EditProfile() {
       <SkillsInput
         value={form.phone}
         placeholder={data ? data.user.phone : "Telefone"}
-        InputLabelProps={{ shrink: "true" }}
+        InputLabelProps={{ shrink: true }}
         label="Telefone"
         type="phone"
         name="phone"
@@ -193,7 +192,7 @@ export default function EditProfile() {
         type="text"
         name="email"
         onChange={handleChange}
-        InputLabelProps={{ shrink: "true" }}
+        InputLabelProps={{ shrink: true }}
         label="E-mail"
         margin="dense"
       />

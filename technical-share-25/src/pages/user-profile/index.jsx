@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import useRequestData from "../../hooks/useRequestData"
 import { BASE_URL, userID } from "../../services/urls"
@@ -9,12 +9,17 @@ import styled from "@emotion/styled"
 import PhoneIcon from "@mui/icons-material/Phone"
 import MailOutlineIcon from "@mui/icons-material/MailOutline"
 import EditIcon from "@mui/icons-material/Edit"
+import axios from "axios"
+import QuestionCard from '../../components/QuestionCard'
 
 const PageContainer = styledComponents.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 100px;
+  span {
+    height: 18px;
+  }
   h4 {
     font-style: normal;
     font-weight: 400;
@@ -132,6 +137,11 @@ const Skill = styled(Chip)`
 
 function UserProfile() {
   const { data } = useRequestData(BASE_URL + "/users/" + userID)
+  const [posts, setPosts] = useState([])
+
+  useEffect(() => {
+    axios.get(BASE_URL + "/posts").then((res) => setPosts(res.data))
+  }, [])
 
   const navigate = useNavigate()
 
@@ -140,6 +150,13 @@ function UserProfile() {
       return <Skill key={skill} id={skill} label={skill} />
     })
     return skillSet
+  }
+
+  const renderPosts = () => {
+    const postFeed = posts?.map((post) => {
+      return <QuestionCard postId={post.post_id}/>})
+
+    return postFeed
   }
 
   const renderPage = () => {
@@ -181,6 +198,8 @@ function UserProfile() {
           </ContactContainer>
           <PostsContainer>
             <h5>Minhas Perguntas</h5>
+            <span/>
+            {renderPosts()}
           </PostsContainer>
         </PageContainer>
       )

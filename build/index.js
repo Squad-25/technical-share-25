@@ -270,6 +270,7 @@ app_1.default.post("/posts/:id/comment", (req, res) => __awaiter(void 0, void 0,
 // Insere Skills User
 app_1.default.post("/skills/:userID", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(req.body);
         yield connection_1.default
             .raw(`
       DELETE FROM Skills WHERE userID = ${req.body.user_id};
