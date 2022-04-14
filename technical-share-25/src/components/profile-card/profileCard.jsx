@@ -102,8 +102,6 @@ export default function ProfileCard({ mentorId }) {
   }, [])
 
   const renderSkills = () => {
-    //if (tags.length > 3) tags.length = 3
-
     const skillset = tags.map((skill) => {
       return <Skill key={skill} id={skill} label={skill} />
     })
