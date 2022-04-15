@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom"
 import styledComponents from "styled-components"
 import logo from "../../assets/technicalshare-logo.svg"
 import { Home, Person, Leaderboard } from "@mui/icons-material"
+import LogoutIcon from '@mui/icons-material/ExitToApp';
+import styled from "@emotion/styled"
+import { Box } from "@mui/system"
 
 const Container = styledComponents.div`
 .header-bg {
@@ -23,12 +26,22 @@ display: none;
   padding-bottom: 20px;
   color: #FFFFFF;
 }
+
+#logo {
+  width: 260px;
+  @media screen and (min-width: 1840px){
+    width: auto;
+  }
+}
  
 .header-menu {
   display: flex;
   gap: 40px;
   flex-wrap: wrap;
   list-style-type: none;
+  @media screen and (max-width: 860px){
+    gap: 16px;
+     }
 }
 
 .header-menu li {
@@ -93,6 +106,15 @@ display: none;
 }
 `
 
+const LogoutButton = styled(Box)`
+ color: white;
+ padding-left: 16px;
+ margin-bottom: -8px;
+ @media screen and (max-width: 860px){
+ padding-left: 0px;
+  }
+`
+
 export default function Header() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -105,7 +127,7 @@ export default function Header() {
     >
       <header className="header-bg">
         <div className="header container">
-          <img
+          <img id="logo"
             src={logo}
             alt="Technical Share"
             onClick={() => navigate("/home")}
@@ -124,7 +146,18 @@ export default function Header() {
                 <Leaderboard className="icon" />
                 <p>Ranking</p>
               </li>
+              <li>
+              <LogoutButton
+            onClick={() => {
+              localStorage.clear()
+              navigate("/")
+            }}
+          >
+            <LogoutIcon />
+          </LogoutButton>
+              </li>
             </ul>
+            
           </nav>
         </div>
       </header>
