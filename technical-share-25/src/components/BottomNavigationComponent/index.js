@@ -34,7 +34,7 @@ export default function BottomNavigationComponent() {
           label="Home"
           value="home"
           icon={<Home />}
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/home")}
           sx={{
             backgroundColor: active === "home" && "#36367D",
             color: "#ffffff",

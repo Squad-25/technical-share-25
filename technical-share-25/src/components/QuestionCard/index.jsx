@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -8,11 +7,10 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Chip, Stack } from '@mui/material';
-
 import ArrowUpIcon from '../../assets/arrow-up-icon.svg';
 import CommentIcon from '../../assets/comment-icon.svg';
-
 import styled from '@emotion/styled';
+import Loading from '../../assets/loading';
 
 const Skill = styled(Chip)`
 margin: 0 4px 8px 0;
@@ -41,7 +39,7 @@ export default function QuestionCard({ postId, showComments = false }) {
         votes: 0
     }]);
 
-    const [tags, setTags] = useState([]);
+    const [tags, setTags] = useState();
 
 
     useEffect(() => {
@@ -102,9 +100,9 @@ export default function QuestionCard({ postId, showComments = false }) {
     }
 
     return (
-        <Box sx={{ minWidth: 275, maxWidth: 600, margin: '0 auto', marginBottom: '10px' }}>
-            <Card variant="outlined" sx={{ margin: '0 auto' }}>
-                <CardContent sx={{ '&.MuiCardContent-root': { padding: '0 16px' } }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center', width: '88vw', margin: '0 auto', marginBottom: '10px' }}>
+            <Card variant="outlined" sx={{ margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
+                {tags ? <><CardContent sx={{ '&.MuiCardContent-root': { padding: '0 16px' } }}>
                     <Typography variant="h6" sx={{}} gutterBottom>
                         {post.title}
                     </Typography>
@@ -134,7 +132,7 @@ export default function QuestionCard({ postId, showComments = false }) {
                     <Typography component="span">
                         1h
                     </Typography>
-                </CardActions>
+                </CardActions></> : <Loading/>}
             </Card>
         </Box>
     );

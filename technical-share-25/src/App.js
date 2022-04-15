@@ -5,6 +5,17 @@ import BottomNavigationComponent from "./components/BottomNavigationComponent"
 import { ThemeProvider } from "@emotion/react"
 import theme from "./constants/theme"
 import BreadCrumbs from "./components/breadcrumbs/breadCrumbs"
+import styledComponents from "styled-components"
+
+const AppContainer = styledComponents.div`
+@media screen and (min-width: 704px) {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+`
 
 
 function App() {
@@ -12,9 +23,11 @@ function App() {
   return (
       <ThemeProvider theme={theme}>
         <BrowserRouter>
+        <AppContainer>
         <BreadCrumbs/>
           <Router />
           <BottomNavigationComponent />
+        </AppContainer>
         </BrowserRouter>
         <CssBaseline/>
       </ThemeProvider>

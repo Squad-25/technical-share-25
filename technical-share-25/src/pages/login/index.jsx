@@ -16,13 +16,14 @@ import styledComponents from "styled-components"
 import logo from "../../assets/breadcrumbs-logo.svg"
 import { useForm } from "../../hooks/useForm"
 import { BASE_URL, userID } from "../../services/urls"
-import Loading from '../../assets/loading'
+import Loading from "../../assets/loading"
 
 const PageContainer = styledComponents.form`
     display: flex;
     flex-direction: column;
     padding: 24px;
     img{
+        align-self: center;
         width: 298px;
     }
     .forgot {
@@ -72,33 +73,33 @@ const EditFormControl = styled(FormControl)`
 export default function Login() {
   const { form, handleChange } = useForm({ email: "", password: "" })
   const [showPassword, setShowPassword] = useState("password")
-  const [buttonText, setButtonText] = useState('Entrar')
+  const [buttonText, setButtonText] = useState("Entrar")
   const [error, setError] = useState(false)
- 
+
   const navigate = useNavigate()
 
- useEffect(() => {
-   if (localStorage.getItem('user_id')) navigate('/home')
- })
+  useEffect(() => {
+    if (localStorage.getItem("user_id")) navigate("/home")
+  })
 
   const login = (e) => {
     e.preventDefault()
-    setButtonText(<Loading onButton/>)
+    setButtonText(<Loading onButton />)
     axios
-      .post(BASE_URL + '/login', form)
+      .post(BASE_URL + "/login", form)
       .then((res) => {
-        localStorage.setItem('user_id', res.data.user_id)
+        localStorage.setItem("user_id", res.data.user_id)
         navigate("/")
       })
       .catch((err) => {
-    setButtonText('Entrar')
-    setError(true)
-        alert('Email ou senha incorretos')
+        setButtonText("Entrar")
+        setError(true)
+        alert("Email ou senha incorretos")
       })
   }
 
   return (
-    <PageContainer type='submit' onSubmit={(e) => login(e)}>
+    <PageContainer type="submit" onSubmit={(e) => login(e)}>
       <img src={logo} alt="logo" />
       <h1>Login</h1>
       <EditInput
@@ -115,7 +116,7 @@ export default function Login() {
       <EditFormControl sx={{ marginTop: 1.1 }} variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">Senha *</InputLabel>
         <OutlinedInput
-        error={error}
+          error={error}
           id="outlined-adornment-password"
           required
           value={form.password}
@@ -142,9 +143,11 @@ export default function Login() {
           }
         />
       </EditFormControl>
-      <p className="forgot" onClick={() => navigate("/")}>Esqueceu sua senha?</p>
+      <p className="forgot" onClick={() => navigate("/")}>
+        Esqueceu sua senha?
+      </p>
       <Button
-      type="submit"
+        type="submit"
         className="loginButton"
         variant="contained"
         onClick={(e) => {
@@ -153,10 +156,13 @@ export default function Login() {
       >
         {buttonText}
       </Button>
-      <Button variant="contained" color="error" onClick={() => {
-        localStorage.setItem('user_id', userID)
-        navigate('/msuserterms')
-        }}>
+      <Button
+        variant="contained"
+        color="error"
+        onClick={() => {
+          navigate("/msuserterms")
+        }}
+      >
         Entrar com office 365
       </Button>
       <div className="signup">

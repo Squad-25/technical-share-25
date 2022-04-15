@@ -196,8 +196,7 @@ export default function CreatePost() {
           variant="outlined"
           onClick={() => {
             clearForm()
-            setTags("")
-            setUserSkills([])
+            navigate(-1)
           }}
         >
           Cancelar

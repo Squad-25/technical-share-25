@@ -272,7 +272,7 @@ app_1.default.post("/skills/:userID", (req, res) => __awaiter(void 0, void 0, vo
     try {
         yield connection_1.default
             .raw(`
-      DELETE FROM Skills WHERE userID = ${req.body.user_id};
+      DELETE FROM Skills WHERE userID = ${req.params.userID};
     `)
             .then(() => {
             const insert = (skill) => __awaiter(void 0, void 0, void 0, function* () {
@@ -348,11 +348,9 @@ app_1.default.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, fun
     SELECT * FROM Users;
     `)
             .then((response) => {
-            console.log(response[0]);
             let checkLogin = false;
             let userID;
             response[0].forEach((user) => {
-                console.log(req.body);
                 if (user.email === req.body.email &&
                     user.password === req.body.password) {
                     checkLogin = true;
@@ -360,7 +358,6 @@ app_1.default.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, fun
                 }
             });
             if (checkLogin) {
-                console.log('entrei');
                 res.send(userID);
             }
             else
