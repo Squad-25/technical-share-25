@@ -2,6 +2,13 @@ import { useState } from "react"
 import { BottomNavigation, BottomNavigationAction } from "@mui/material"
 import { Home, Person, Leaderboard } from "@mui/icons-material"
 import { useNavigate, useLocation } from "react-router-dom"
+import styledComponents from "styled-components"
+
+const Container = styledComponents.div`
+@media screen and (min-width: 704px) {
+  display: none;
+}
+`
 
 export default function BottomNavigationComponent() {
   const [value, setValue] = useState("consultar")
@@ -16,6 +23,8 @@ export default function BottomNavigationComponent() {
     
     if (path !== '/' && path !== '/msuserterms')
     return (
+      <Container>
+
       <BottomNavigation
         showLabels
         value={value}
@@ -29,7 +38,7 @@ export default function BottomNavigationComponent() {
           backgroundColor: "#404099",
         }}
         className=""
-      >
+        >
         <BottomNavigationAction
           label="Home"
           value="home"
@@ -42,7 +51,7 @@ export default function BottomNavigationComponent() {
               color: "#ffffff",
             },
           }}
-        />
+          />
         <BottomNavigationAction
           label="Perfil"
           value="perfil"
@@ -55,7 +64,7 @@ export default function BottomNavigationComponent() {
               color: "#ffffff",
             },
           }}
-        />
+          />
         <BottomNavigationAction
           label="Ranking"
           value="ranking"
@@ -68,8 +77,9 @@ export default function BottomNavigationComponent() {
               color: "#ffffff",
             },
           }}
-        />
+          />
       </BottomNavigation>
+          </Container>
     )
   }
 
