@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import useRequestData from "../../hooks/useRequestData"
 import { BASE_URL, userID } from "../../services/urls"
@@ -8,13 +8,18 @@ import { Chip } from "@mui/material"
 import styled from "@emotion/styled"
 import PhoneIcon from "@mui/icons-material/Phone"
 import MailOutlineIcon from "@mui/icons-material/MailOutline"
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit"
+import axios from "axios"
+import QuestionCard from "../../components/QuestionCard"
 
 const PageContainer = styledComponents.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 100px;
+  span {
+    height: 18px;
+  }
   h4 {
     font-style: normal;
     font-weight: 400;
@@ -24,7 +29,7 @@ const PageContainer = styledComponents.div`
     display: flex;
     align-items: center;
   }
-  h6 {
+  h2 {
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
@@ -33,7 +38,12 @@ const PageContainer = styledComponents.div`
     justify-content: center;
     align-items: center;
   }
-  h7 {
+  h3{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+  }
+  h5 {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -127,6 +137,13 @@ const Skill = styled(Chip)`
 
 function UserProfile() {
   const { data } = useRequestData(BASE_URL + "/users/" + userID)
+  const [posts, setPosts] = useState()
+
+  useEffect(() => {
+    axios
+      .get(BASE_URL + "/user/" + userID + "/posts")
+      .then((res) => setPosts(res.data))
+  }, [])
 
   const navigate = useNavigate()
 
@@ -137,29 +154,47 @@ function UserProfile() {
     return skillSet
   }
 
+  const renderPosts = () => {
+    const postFeed = posts ? (
+      posts.posts.map((post) => {
+        return <QuestionCard postId={post.post_id} />
+      })
+    ) : (
+      <></>
+    )
+
+    return postFeed
+  }
+
   const renderPage = () => {
     if (data.user) {
       return (
         <PageContainer>
           <ProfilePic src={data.user.photo} />
-          <h4>{data.user.user_name} <EditIcon className="icon" onClick={() => navigate('/profile/edit')}/></h4>
-          <h6>{data.user.role}</h6>
+          <h4>
+            {data.user.user_name}{" "}
+            <EditIcon
+              className="icon"
+              onClick={() => navigate("/profile/edit")}
+            />
+          </h4>
+          <h2>{data.user.role}</h2>
           <RankContainer>
             <div>
-              <h6>200</h6>
-              <h8>Interações</h8>
+              <h2>200</h2>
+              <h3>Interações</h3>
             </div>
             <div>
-              <h6>
+              <h2>
                 120
                 <Triangle />
-              </h6>
-              <h8>Posição</h8>
+              </h2>
+              <h3>Posição</h3>
             </div>
           </RankContainer>
-          <h7>Conhecimentos e skills</h7>
+          <h5>Conhecimentos e skills</h5>
           <SkillsContainer>{data ? renderSkills() : <></>}</SkillsContainer>
-          <h7 className="contato">Contato</h7>
+          <h5 className="contato">Contato</h5>
           <ContactContainer>
             <PhoneIcon />
             <a href={`tel:+55${data.user.phone}`}>{data.user.phone}</a>
@@ -169,11 +204,18 @@ function UserProfile() {
             <a href={`mailto:${data.user.email}`}>{data.user.email}</a>
           </ContactContainer>
           <PostsContainer>
-            <h7>Minhas Perguntas</h7>
+            <h5>Minhas Perguntas</h5>
+            <span />
+            {renderPosts()}
           </PostsContainer>
         </PageContainer>
       )
-    } else return <LoadingContainer><h2>Ops! Perfil não encontrado</h2></LoadingContainer>
+    } else
+      return (
+        <LoadingContainer>
+          <h2>Ops! Perfil não encontrado</h2>
+        </LoadingContainer>
+      )
   }
 
   return (

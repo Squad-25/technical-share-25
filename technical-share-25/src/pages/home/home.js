@@ -74,10 +74,8 @@ export default function Home() {
   }
 
   return (
-    <div className="PageContainer">
-      <Typography sx={{ fontSize: '24px', fontWeight: 700 }}>
-        Technical Share
-      </Typography>
+    <div className="PageContainer" style={{marginBottom: "140px"}}>
+
 
       <TogglePeoplePost toggle={toggle} setToggle={setToggle} />
 
