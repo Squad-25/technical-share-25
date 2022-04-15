@@ -9,6 +9,7 @@ const PromptContainer = styledComponents.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   h5 {
     font-style: normal;
     font-weight: 400;
@@ -31,9 +32,9 @@ const ChipContainer = styled(Box)`
   align-self: flex-start;
 `
 
+// ARRUMAR!!
 const SkillsInput = styled(TextField)`
   margin-top: 8px;
-  width: 90%;
 `
 
 const Skill = styled(Chip)`

@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styledComponents from "styled-components"
 import api from "../../services/api"
-
-import avatar from '../../assets/avatar.svg';
+import Loading from '../../assets/loading'
 
 const CardContainer = styledComponents.div`
   display: flex;
@@ -70,7 +69,7 @@ export default function ProfileCard({ mentorId }) {
     photo: ''
   })
 
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState();
 
   const numberOfSkillsToRender = 3;
 
@@ -117,10 +116,10 @@ export default function ProfileCard({ mentorId }) {
   }
 
   return (
-    <CardContainer onClick={() => navigate('/user/' + mentorId)}>
-      <InfoContainer>
+        <CardContainer onClick={() => navigate('/user/' + mentorId)}>
+          {tags ? <><InfoContainer>
         <HeaderProfile>
-          <img src={avatar} alt={`${mentor.name} profile`} />
+          <img src={mentor.photo} alt={`${mentor.name} profile`} />
           <div style={{ height: '48px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginLeft: '16px' }}>
             <p className="mentor-name">{mentor.name}</p>
             <p className="mentor-role">{mentor.role}</p>
@@ -128,6 +127,7 @@ export default function ProfileCard({ mentorId }) {
         </HeaderProfile>
       </InfoContainer>
       <SkillsContainer>{tags ? renderSkills() : <></>}</SkillsContainer>
-    </CardContainer>
+</> : <Loading />}
+          </CardContainer>
   )
 }
