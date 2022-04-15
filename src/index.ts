@@ -280,7 +280,7 @@ app.post("/skills/:userID", async (req: Request, res: Response) => {
     await connection
       .raw(
         `
-      DELETE FROM Skills WHERE userID = ${req.body.user_id};
+      DELETE FROM Skills WHERE userID = ${req.params.userID};
     `
       )
       .then(() => {
@@ -365,8 +365,6 @@ app.post("/login", async (req: Request, res: Response) => {
         let checkLogin = false
         let userID
         response[0].forEach((user: any) => {
-          console.log(req.body)
-
           if (
             user.email === req.body.email &&
             user.password === req.body.password

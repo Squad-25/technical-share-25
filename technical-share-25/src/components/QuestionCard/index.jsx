@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -11,8 +10,8 @@ import { Chip, Grid, Stack } from '@mui/material';
 
 import ArrowUpIcon from '../../assets/arrow-up-icon.svg';
 import CommentIcon from '../../assets/comment-icon.svg';
-
 import styled from '@emotion/styled';
+import Loading from '../../assets/loading';
 
 const Skill = styled(Chip)`
 margin: 0 4px 8px 0;
@@ -41,7 +40,7 @@ export default function QuestionCard({ postId, showComments = false }) {
         votes: 0
     }]);
 
-    const [tags, setTags] = useState([]);
+    const [tags, setTags] = useState();
 
 
     useEffect(() => {

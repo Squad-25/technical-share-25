@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import breadcrumbsLogo from "../../assets/breadcrumbs-logo.svg"
 import styled from "@emotion/styled"
 import { Button } from "@mui/material"
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 const Container = styledComponents.div`
@@ -12,7 +13,7 @@ const Container = styledComponents.div`
  align-items: center;
  align-self: flex-start; 
  font-size: 20px;
- margin: 16px 32px;
+ margin: 16px 28px;
  p{
    margin-left: 16px;
    font-style: normal;
@@ -39,7 +40,7 @@ export default function BreadCrumbs() {
   const Icon = () => {
     return (
       <ArrowBackIosNewIcon
-        className="icon"
+        className="icon" sx={{cursor: 'pointer'}}
         onClick={() => {
           navigate(-1)
         }}
@@ -60,7 +61,7 @@ export default function BreadCrumbs() {
               navigate("/")
             }}
           >
-            Logout
+            <LogoutIcon />
           </LogoutButton>
           </Container>
         )
@@ -100,6 +101,12 @@ export default function BreadCrumbs() {
             <Icon /> <p>Skills</p>
           </Container>
         )
+        case "/msuserterms":
+          return (
+            <Container>
+              <Icon /> <p>Entrar com Office</p>
+            </Container>
+          )
       default:
         return
     }

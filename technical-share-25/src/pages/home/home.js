@@ -10,6 +10,7 @@ import ProfileCard from "../../components/profile-card/profileCard";
 import TogglePeoplePost from "../../components/TogglePeoplePost";
 import SearchBar from "../../components/search-bar/searchBar";
 import HomeFab from "../../components/home-fab";
+import TopBar from '../../components/TopBar';
 
 const TogglesGroup = styledComponents.div`
   @media(min-width: 360px){
@@ -59,6 +60,15 @@ const SearchHeader = styledComponents.div`
     margin: 30px auto 0;
     
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.17);
+  }
+`;
+
+const ToggleTopBar = styledComponents.div`
+  @media(min-width: 360px){
+    display: none; 
+  }
+  @media(min-width: 704px){
+    display: inline-block; 
   }
 `;
 
@@ -130,7 +140,9 @@ export default function Home() {
     <Grid container spacing={2} sx={{ width: '100wv', padding: '24.5px', marginBottom: "140px" }}>
       {/* <div className="PageContainer" style={{ marginBottom: "140px" }}> */}
 
-
+      <ToggleTopBar>
+        <TopBar />
+      </ToggleTopBar>
       <SearchHeader>
         <Grid item mobile={12}>
           <Grid container spacing={3}>

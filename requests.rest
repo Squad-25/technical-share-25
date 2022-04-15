@@ -66,3 +66,37 @@ Content-Type: application/json; charset=utf-8
   "email": "claytn@charles.com",
   "password": "carloscleiton1"
 }
+
+###
+
+POST http://localhost:3003/users
+Content-Type: application/json; charset=utf-8
+
+{
+        "name": "Cleiton Carlos",
+        "email": "cleitito@fcamara.com",
+        "password": "#95e24d",
+        "photo": "https://ibb.co/tBhcb0s",
+        "phone": "(45) 49058-8168",
+        "role": "CEo do seu coração"
+}
+
+###
+POST http://localhost:3003/skills/204
+Content-Type: application/json; charset=utf-8
+
+{
+    "skills": ["carinho", "compaixão", "sorriso", "barata"]
+}
+
+###
+    {
+        "name": "Cleiton Carlos",
+        "email": "cleitito@fcamara.com",
+        "password": "#95e24d",
+        "photo": "https://ibb.co/tBhcb0s",
+        "phone": "(45) 49058-8168",
+        "role": "CEo do seu coração",
+        "skills": ["carinho", "compaixão", "sorriso", "barata"]
+    }
+]
