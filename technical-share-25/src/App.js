@@ -1,4 +1,4 @@
-import { BrowserRouter, useLocation } from "react-router-dom"
+import { BrowserRouter } from "react-router-dom"
 import Router from "./routes/router"
 import CssBaseline from "@mui/material/CssBaseline"
 import BottomNavigationComponent from "./components/BottomNavigationComponent"
@@ -9,8 +9,6 @@ import styledComponents from "styled-components"
 
 const AppContainer = styledComponents.div`
 @media screen and (min-width: 704px) {
-  width: 100vw;
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;

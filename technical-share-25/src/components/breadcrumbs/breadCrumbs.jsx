@@ -23,6 +23,9 @@ const Container = styledComponents.div`
  img {
    width: 206px;
  }
+ @media screen and (min-width: 704px) {
+  display: none;
+}
 `
 
 const LogoutButton = styled(Button)`
