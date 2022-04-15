@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom"
 import styledComponents from "styled-components"
 import logo from "../../assets/breadcrumbs-logo.svg"
 import { useForm } from "../../hooks/useForm"
-import { BASE_URL, userID } from "../../services/urls"
+import { BASE_URL } from "../../services/urls"
 import Loading from "../../assets/loading"
 
 const PageContainer = styledComponents.form`
