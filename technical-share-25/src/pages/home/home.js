@@ -1,13 +1,66 @@
+import { useEffect, useState } from "react";
+import api from "../../services/api";
+import styledComponents from 'styled-components';
+
 import BottomNavigationComponent from "../../components/BottomNavigationComponent";
-import { Divider, Typography } from "@mui/material";
+import { Divider, Grid, Typography, FormGroup, FormControlLabel, Switch } from "@mui/material";
 
 import QuestionCard from "../../components/QuestionCard";
 import ProfileCard from "../../components/profile-card/profileCard";
-import { useEffect, useState } from "react";
-import api from "../../services/api";
 import TogglePeoplePost from "../../components/TogglePeoplePost";
 import SearchBar from "../../components/search-bar/searchBar";
 import HomeFab from "../../components/home-fab";
+
+const TogglesGroup = styledComponents.div`
+  @media(min-width: 360px){
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+
+    .filter-toggle{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-items: flex-start;
+    }
+  }
+
+  @media(min-width: 704px){
+    width: 86.5%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+
+    .filter-toggle{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-items: center;
+    }
+  }
+`;
+
+const SearchHeader = styledComponents.div`
+  @media(min-width: 360px){
+    width: 100%;
+    min-width: 311px;
+    margin: 30px auto 0;
+    
+  }
+
+  @media(min-width: 704px){
+    width: 90.90%;
+    min-width: 680px;
+    margin: 30px auto 0;
+    
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.17);
+  }
+`;
 
 
 export default function Home() {
@@ -74,12 +127,31 @@ export default function Home() {
   }
 
   return (
-    <div className="PageContainer" style={{marginBottom: "140px"}}>
+    <Grid container spacing={2} sx={{ width: '100wv', padding: '24.5px', marginBottom: "140px" }}>
+      {/* <div className="PageContainer" style={{ marginBottom: "140px" }}> */}
 
 
-      <TogglePeoplePost toggle={toggle} setToggle={setToggle} />
+      <SearchHeader>
+        <Grid item mobile={12}>
+          <Grid container spacing={3}>
+            <TogglesGroup>
+              <Grid item mobile={12} tablet={6} desktop={4}>
+                <TogglePeoplePost toggle={toggle} setToggle={setToggle} />
+              </Grid>
+              <Grid item mobile={12} tablet={6} desktop={4}>
+                <FormGroup sx={{ fontSize: '12px' }} className="filter-toggle">
+                  <Switch />
+                  <label>Filtrar perguntas pelas minhas skills</label>
+                </FormGroup>
+              </Grid>
+            </TogglesGroup>
+          </Grid>
+        </Grid>
 
-      <SearchBar skills={skillsNamesSelected} setSkills={SetSkillsNamesSelected} />
+        <Grid item mobile={12}>
+          <SearchBar skills={skillsNamesSelected} setSkills={SetSkillsNamesSelected} />
+        </Grid>
+      </SearchHeader>
 
       <Divider sx={{ width: '100%', margin: '16px 0' }} />
 
@@ -100,6 +172,7 @@ export default function Home() {
 
       <BottomNavigationComponent />
       <HomeFab />
-    </div>
+      {/* </div> */}
+    </Grid>
   )
 }

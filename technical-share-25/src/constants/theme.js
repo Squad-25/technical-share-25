@@ -18,6 +18,13 @@ const theme = createTheme({
             main: "#BA3300",
         }
     },
+    breakpoints: {
+        values: {
+            mobile: 360,
+            tablet: 704,
+            desktop: 1240,
+        },
+    }
 });
 
 export default theme

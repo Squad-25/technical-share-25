@@ -7,7 +7,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Chip, Stack } from '@mui/material';
+import { Chip, Grid, Stack } from '@mui/material';
 
 import ArrowUpIcon from '../../assets/arrow-up-icon.svg';
 import CommentIcon from '../../assets/comment-icon.svg';
@@ -102,40 +102,43 @@ export default function QuestionCard({ postId, showComments = false }) {
     }
 
     return (
-        <Box sx={{ minWidth: 275, maxWidth: 600, margin: '0 auto', marginBottom: '10px' }}>
-            <Card variant="outlined" sx={{ margin: '0 auto' }}>
-                <CardContent sx={{ '&.MuiCardContent-root': { padding: '0 16px' } }}>
-                    <Typography variant="h6" sx={{}} gutterBottom>
-                        {post.title}
-                    </Typography>
-                    <Typography paragraph>
-                        {post.body}
-                    </Typography>
-                    <Stack direction="row" spacing={1}>
-                        {tags.map(tag => {
-                            return (
-                                <Skill key={tag} label={tag} />
-                            )
-                        })}
-                    </Stack>
-                </CardContent>
-                <CardActions sx={{ display: 'flex', justifyContent: 'space-between', margin: '0 10px', '&.MuiCardActions-root': { padding: '4px 0px' } }}>
-                    <Stack direction="row" spacing={0}>
-                        <Button aria-label="curtir a pergunta" onClick={() => handleUpVote()}>
-                            <img src={ArrowUpIcon} alt="curtir a pergunta" />
-                            <span style={{ color: '#212121', marginLeft: '10px' }}>{post.votes}</span>
-                        </Button>
-                        <Button aria-label="responder a pergunta" onClick={() => handleComment()}>
-                            <img src={CommentIcon} alt="responder a pergunta" />
-                            <span style={{ color: '#212121', marginLeft: '10px' }}>{comments.length}</span>
-                        </Button>
-                    </Stack>
+        <Grid item mobile={12} tablet={6} desktop={4}>
 
-                    <Typography component="span">
-                        1h
-                    </Typography>
-                </CardActions>
-            </Card>
-        </Box>
+            <Box sx={{ minWidth: 275, maxWidth: 600, margin: '0 auto', marginBottom: '10px' }}>
+                <Card variant="outlined" sx={{ margin: '0 auto' }}>
+                    <CardContent sx={{ '&.MuiCardContent-root': { padding: '0 16px' } }}>
+                        <Typography variant="h6" sx={{}} gutterBottom>
+                            {post.title}
+                        </Typography>
+                        <Typography paragraph>
+                            {post.body}
+                        </Typography>
+                        <Stack direction="row" spacing={1}>
+                            {tags.map(tag => {
+                                return (
+                                    <Skill key={tag} label={tag} />
+                                )
+                            })}
+                        </Stack>
+                    </CardContent>
+                    <CardActions sx={{ display: 'flex', justifyContent: 'space-between', margin: '0 10px', '&.MuiCardActions-root': { padding: '4px 0px' } }}>
+                        <Stack direction="row" spacing={0}>
+                            <Button aria-label="curtir a pergunta" onClick={() => handleUpVote()}>
+                                <img src={ArrowUpIcon} alt="curtir a pergunta" />
+                                <span style={{ color: '#212121', marginLeft: '10px' }}>{post.votes}</span>
+                            </Button>
+                            <Button aria-label="responder a pergunta" onClick={() => handleComment()}>
+                                <img src={CommentIcon} alt="responder a pergunta" />
+                                <span style={{ color: '#212121', marginLeft: '10px' }}>{comments.length}</span>
+                            </Button>
+                        </Stack>
+
+                        <Typography component="span">
+                            1h
+                        </Typography>
+                    </CardActions>
+                </Card>
+            </Box>
+        </Grid>
     );
 }

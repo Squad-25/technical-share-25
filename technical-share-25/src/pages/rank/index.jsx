@@ -147,7 +147,6 @@ export default function Rank() {
 
   updateRanking = false;
 
-  console.log('ranking = ', ranking);
   console.log(updateRanking);
 
   return (
