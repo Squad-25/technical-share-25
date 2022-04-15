@@ -11,15 +11,16 @@ import TogglePeoplePost from "../../components/TogglePeoplePost";
 import SearchBar from "../../components/search-bar/searchBar";
 import HomeFab from "../../components/home-fab";
 import TopBar from '../../components/TopBar';
+import { Box } from "@mui/system";
 
 const TogglesGroup = styledComponents.div`
   @media(min-width: 360px){
     width: 100%;
-    margin: 0 auto;
+    /* margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-items: center;
+    justify-items: center; */
 
     .filter-toggle{
       display: flex;
@@ -31,11 +32,11 @@ const TogglesGroup = styledComponents.div`
 
   @media(min-width: 704px){
     width: 86.5%;
-    margin: 0 auto;
+    /* margin: 0 auto;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-items: center;
+    justify-items: center; */
 
     .filter-toggle{
       display: flex;
@@ -51,24 +52,16 @@ const SearchHeader = styledComponents.div`
     width: 100%;
     min-width: 311px;
     margin: 30px auto 0;
-    
+    padding: 0 30px;
   }
 
   @media(min-width: 704px){
     width: 90.90%;
     min-width: 680px;
     margin: 30px auto 0;
+    padding: 0 30px;
     
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.17);
-  }
-`;
-
-const ToggleTopBar = styledComponents.div`
-  @media(min-width: 360px){
-    display: none; 
-  }
-  @media(min-width: 704px){
-    display: inline-block; 
   }
 `;
 
@@ -137,26 +130,25 @@ export default function Home() {
   }
 
   return (
-    <Grid container spacing={2} sx={{ width: '100wv', padding: '24.5px', marginBottom: "140px" }}>
-      {/* <div className="PageContainer" style={{ marginBottom: "140px" }}> */}
+    <Box sx={{ width: '100wv', padding: '24.5px', marginTop: '100px', marginBottom: "140px" }}>
 
-      <ToggleTopBar>
-        <TopBar />
-      </ToggleTopBar>
+      < TopBar />
+
       <SearchHeader>
-        <Grid item mobile={12}>
-          <Grid container spacing={3}>
-            <TogglesGroup>
-              <Grid item mobile={12} tablet={6} desktop={4}>
-                <TogglePeoplePost toggle={toggle} setToggle={setToggle} />
-              </Grid>
-              <Grid item mobile={12} tablet={6} desktop={4}>
-                <FormGroup sx={{ fontSize: '12px' }} className="filter-toggle">
-                  <Switch />
-                  <label>Filtrar perguntas pelas minhas skills</label>
-                </FormGroup>
-              </Grid>
-            </TogglesGroup>
+        <Grid container mobile={12}>
+          <Grid container item alignItems="center" justifyItems="center" spacing={0}>
+
+            <Grid item mobile={12} tablet={6} desktop={4}>
+              <TogglePeoplePost toggle={toggle} setToggle={setToggle} />
+            </Grid>
+
+            <Grid item mobile={12} tablet={6} desktop={4}>
+              <FormGroup sx={{ fontSize: '12px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Switch />
+                <label>Filtrar perguntas pelas minhas skills</label>
+              </FormGroup>
+            </Grid>
+
           </Grid>
         </Grid>
 
@@ -167,24 +159,34 @@ export default function Home() {
 
       <Divider sx={{ width: '100%', margin: '16px 0' }} />
 
-      <Typography sx={{ fontSize: '16px', marginBottom: '16px' }}>
-        Resultados
-      </Typography>
-
       {
-        toggle === 'pessoas' ?
-          mentors.map(mentor => (
-            <ProfileCard key={mentor.mentorId} mentorId={mentor.mentorId} />
-          ))
+        skillsNamesSelected.length === 0 ?
+          <></>
           :
-          posts.map(post => (
-            <QuestionCard key={post.postId} postId={post.postId} />
-          ))
+          <Typography sx={{ fontSize: '16px', marginBottom: '16px' }}>
+            Resultados
+          </Typography>
       }
+
+
+      <Grid container spacing={1} sx={{ width: '100wv', margin: '0 auto' }} columns={{ mobile: 12, tablet: 6, desktop: 4 }}>
+        {
+          toggle === 'pessoas' ?
+            mentors.map(mentor => (
+              <ProfileCard key={mentor.mentorId} mentorId={mentor.mentorId} />
+            ))
+            :
+            posts.map(post => (
+              <QuestionCard key={post.postId} postId={post.postId} />
+            ))
+        }
+
+      </Grid>
 
       <BottomNavigationComponent />
       <HomeFab />
-      {/* </div> */}
-    </Grid>
+
+
+    </Box>
   )
 }

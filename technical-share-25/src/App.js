@@ -12,6 +12,7 @@ const AppContainer = styledComponents.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 `
 
@@ -19,16 +20,16 @@ const AppContainer = styledComponents.div`
 function App() {
 
   return (
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
         <AppContainer>
-        <BreadCrumbs/>
+          <BreadCrumbs />
           <Router />
           <BottomNavigationComponent />
         </AppContainer>
-        </BrowserRouter>
-        <CssBaseline/>
-      </ThemeProvider>
+      </BrowserRouter>
+      <CssBaseline />
+    </ThemeProvider>
   );
 }
 

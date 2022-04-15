@@ -40,7 +40,7 @@ export default function QuestionCard({ postId, showComments = false }) {
         votes: 0
     }]);
 
-    const [tags, setTags] = useState();
+    const [tags, setTags] = useState([]);
 
 
     useEffect(() => {
@@ -101,10 +101,10 @@ export default function QuestionCard({ postId, showComments = false }) {
     }
 
     return (
-        <Grid item mobile={12} tablet={6} desktop={4}>
+        <Grid item sx={{ width: '312px', height: '312px !important' }}>
 
-            <Box sx={{ minWidth: 275, maxWidth: 600, margin: '0 auto', marginBottom: '10px' }}>
-                <Card variant="outlined" sx={{ margin: '0 auto' }}>
+            <Box>
+                <Card variant="outlined" >
                     <CardContent sx={{ '&.MuiCardContent-root': { padding: '0 16px' } }}>
                         <Typography variant="h6" sx={{}} gutterBottom>
                             {post.title}

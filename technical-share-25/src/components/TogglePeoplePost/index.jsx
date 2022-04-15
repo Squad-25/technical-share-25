@@ -13,6 +13,7 @@ export default function TogglePeoplePost({ toggle, setToggle }) {
                     width: '312px',
                     height: '36px',
                     margin: '20px auto',
+                    display: 'flex',
 
                     backgroundColor: '#ffffff',
                     border: '1px solid #404099'

@@ -14,89 +14,55 @@ import MenuItem from '@mui/material/MenuItem';
 
 import LogoCertinho from '../../assets/logo-certinho.svg';
 import { Home, Person, Leaderboard } from "@mui/icons-material";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const pages = ['Home', 'Perfil', 'Ranking'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const TopBar = () => {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
+    const navigate = useNavigate();
+    const location = useLocation()
+    const path = location.pathname
 
     return (
-        <AppBar position="static" sx={{ position: 'absolute', top: 0, width: '100wv' }}>
-            <Container maxWidth="xl">
+        <AppBar position="fixed" sx={{ position: 'absolute', top: 0, width: '100wv', display: { mobile: 'none', tablet: 'flex' } }}>
+            <Container>
                 <Toolbar disableGutters>
                     <Typography
                         variant="h6"
                         noWrap
                         component="div"
-                        sx={{ mr: 2, display: { mobile: 'none', tablet: 'flex' } }}
+                        sx={{ mr: 2, display: { tablet: 'flex' } }}
                     >
                         <img src={LogoCertinho} alt="Technical Share" />
                     </Typography>
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
-                            sx={{
-                                display: { xs: 'block', md: 'none' },
-                            }}
-                        >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
+                    <Box sx={{ display: { tablet: 'flex' }, flexGrow: 0, alignItems: 'center', justifyContent: 'center' }}>
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
-                        ))}
+                        <Button
+                            /* onClick={navigate('/home')} */
+                            sx={{ my: 2, color: 'white', display: 'inline-block' }}
+                        >
+                            <Home />
+                            Home
+                        </Button>
+
+                        <Button
+                            /* onClick={navigate('/profile')} */
+                            sx={{ my: 2, color: 'white', display: 'inline-block' }}
+                        >
+                            <Person />
+                            Perfil
+                        </Button>
+
+                        <Button
+                            /* onClick={navigate('/rank')} */
+                            sx={{ my: 2, color: 'white', display: 'inline-block' }}
+                        >
+                            <Leaderboard />
+                            Ranking
+                        </Button>
+
                     </Box>
 
 
