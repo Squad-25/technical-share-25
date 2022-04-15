@@ -8,6 +8,7 @@ import Trophy_2st from '../../assets/trophy_2st.svg';
 import Trophy_3st from '../../assets/trophy_3st.svg';
 import ArrowUp from '../../assets/arrow-up-icon.svg';
 import Avatar from '../../assets/avatar.svg';
+import api from '../../services/api';
 
 const PageContainer = styledComponents.div`
   width: 100vw;
@@ -68,68 +69,86 @@ const Points = styledComponents.div`
 export default function Rank() {
   const [ranking, setRanking] = useState([
     {
-      position: 1,
       participant: {
-        avatar: Avatar,
-        name: 'sabrina'
+        avatar: '',
+        name: ''
       },
-      points: 150
-    },
-    {
-      position: 2,
-      participant: {
-        avatar: Avatar,
-        name: 'kleuvys'
-      },
-      points: 144
-    },
-    {
-      position: 3,
-      participant: {
-        avatar: Avatar,
-        name: 'elemento'
-      },
-      points: 139
-    },
-    {
-      position: '#4',
-      participant: {
-        avatar: Avatar,
-        name: 'elemento4'
-      },
-      points: 125
-    },
-    {
-      position: '#5',
-      participant: {
-        avatar: Avatar,
-        name: 'elemento5'
-      },
-      points: 111
-    },
-    {
-      position: '#6',
-      participant: {
-        avatar: Avatar,
-        name: 'elemento6'
-      },
-      points: 100
+      points: 0
     }
   ]);
 
-  function rankingWithTrophys() {
-    const newRanking = [...ranking];
+  let updateRanking = true;
 
-    newRanking[0].position = <img src={Trophy_1st} alt="primeiro lugar" />;
-    newRanking[1].position = <img src={Trophy_2st} alt="segundo lugar" />;
-    newRanking[2].position = <img src={Trophy_3st} alt="terceiro lugar" />;
+  async function calculateRanking() {
+    if (updateRanking) {
+      const { data } = await api.get('posts');
 
-    setRanking(newRanking);
+      const usersPosts = data.map((post) => {
+        return {
+          participant: {
+            avatar: '',
+            name: post.user_name
+          },
+          points: post.votes
+        }
+      });
+
+      const newRankingWithoutDuplicatesAndSummedPoints = [];
+
+      usersPosts.reduce((acc, current) => {
+
+        if (acc.participant.name === current.participant.name) {
+          newRankingWithoutDuplicatesAndSummedPoints.push({
+            participant: {
+              avatar: '',
+              name: acc.participant.name
+            },
+            points: acc.points + current.points
+          });
+
+          return {
+            participant: {
+              avatar: '',
+              name: current.participant.name
+            },
+            points: acc.points + current.points
+          }
+        } else {
+          newRankingWithoutDuplicatesAndSummedPoints.push({
+            participant: {
+              avatar: '',
+              name: current.participant.name
+            },
+            points: current.points
+          });
+
+          return {
+            participant: {
+              avatar: '',
+              name: current.participant.name
+            },
+            points: current.points
+          }
+        }
+      });
+
+      const rankingOrdered = newRankingWithoutDuplicatesAndSummedPoints.sort(function (rankingItem1, rankingItem2) {
+
+        return rankingItem2.points - rankingItem1.points;
+      });
+
+      setRanking(rankingOrdered);
+    }
   }
 
   useEffect(() => {
-    rankingWithTrophys();
-  }, [ranking])
+    calculateRanking();
+  }, []);
+
+  updateRanking = false;
+
+  console.log('ranking = ', ranking);
+  console.log(updateRanking);
 
   return (
     <PageContainer>
@@ -143,10 +162,13 @@ export default function Rank() {
         {ranking.map((item, index) => (
           <RankingPosition>
             <Position>
-              {item.position}
+              {index === 0 && (<img src={Trophy_1st} alt="primeiro lugar" />)}
+              {index === 1 && (<img src={Trophy_2st} alt="segundo lugar" />)}
+              {index === 2 && (<img src={Trophy_3st} alt="terceiro lugar" />)}
+              {index > 2 && `#${index + 1}`}
             </Position>
             <Person>
-              <img src={item.participant.avatar} alt={item.participant.name} />
+              {item.participant.avatar === '' && (<img src={Avatar} alt={item.participant.name} />)}
               {item.participant.name}
             </Person>
             <Points>
