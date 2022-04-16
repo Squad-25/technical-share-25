@@ -1,14 +1,24 @@
-import { Button, Chip, InputAdornment, TextField } from "@mui/material"
+import { Button, Chip, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material"
 import React, { useState } from "react"
 import styledComponents from "styled-components"
 import styled from "@emotion/styled"
-import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded"
-import SearchIcon from "@mui/icons-material/Search"
 import axios from "axios"
 import { BASE_URL, userID } from "../../services/urls"
 import { useNavigate } from "react-router-dom"
 import { Box } from "@mui/system"
 import { useForm } from "../../hooks/useForm"
+import logo from "../../assets/breadcrumbs-logo.svg"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
+
+
+const EditInput = styled(TextField)`
+  margin-top: 24px;
+  width: 100%;
+`
+
+const EditFormControl = styled(FormControl)`
+  width: 100%;
+`
 
 const PageContainer = styledComponents.div`
   padding: 25px;
@@ -19,6 +29,13 @@ const PageContainer = styledComponents.div`
     font-weight: 700;
     font-size: 16px;
     line-height: 20px;
+  }
+  img{
+    margin-bottom: 32px;
+    cursor: pointer;
+    @media screen and (max-width: 704px) {
+      display: none;
+    }
   }
 `
 
@@ -62,135 +79,130 @@ const Skill = styled(Chip)`
 `
 
 export default function Signup() {
-  const { form, handleChange, clearForm } = useForm({ title: "", body: "" })
-  const [tags, setTags] = useState("")
-  const [userSkills, setUserSkills] = useState([])
-  const [error, setError] = useState({ title: false, body: false, tags: false })
+  const { form, handleChange, clearForm } = useForm({ name: "", photo: "", role: "", email: "", password: "" })
+  const [error, setError] = useState({ name: false, photo: false, role: false, email: false, password: false})
+  const [showPassword, setShowPassword] = useState("password")
+
 
   const navigate = useNavigate()
-
-  const renderSkills = () => {
-    const skillSet = userSkills.map((skill) => {
-      return (
-        <Skill
-          color="primary"
-          key={skill}
-          id={skill}
-          label={skill}
-          onDelete={() => {
-            const newSkills = userSkills.filter((deleteSkill) => {
-              return skill !== deleteSkill
-            })
-            setUserSkills(newSkills)
-          }}
-        />
-      )
-    })
-    return skillSet
-  }
-
-  const isDisabled = () => {
-    if (userSkills.length === 0) return true
-    else return false
-  }
-
-  const submitSkill = (e) => {
-    e.preventDefault()
-    if (userSkills.some((skill) => skill === tags)) {
-      setTags("")
-    } else {
-      setUserSkills([...userSkills, tags])
-      setTags("")
-    }
-  }
 
   const submitForm = (e) => {
     e.preventDefault()
 
-    if (form.title === "") {
-      setError({ title: true })
-    } else if (form.body === "") {
-      setError({ body: true })
-    } else if (userSkills === []) {
-      setError({ tags: true })
-    } else if (form.title !== "" && form.body !== "" && userSkills !== []) {
-      const request = {
-        userID: `"${userID}"`,
-        title: form.title,
-        body: form.body,
-        skills: userSkills,
-      }
 
       axios
-        .post(BASE_URL + `/posts`, request)
+        .post(BASE_URL + `/users`, form)
         .then((res) => {
-          alert("Pergunta enviada!")
-          navigate("/")
+          localStorage.setItem('user_id', res.data.id)
+          navigate("/skills-prompt")
         })
         .catch((err) => {
           console.log(err)
         })
-    }
   }
+
+
+
+  // "name": "Larry",
+  // "email": "l@l.com",
+  // "password": "1",
+  // "photo": "https://avatars.githubusercontent.com/u/92735047?v=4",
+  // "phone": "(11) 99999-0000",
+  // "role": "UX"
+
 
   return (
     <PageContainer>
-      <SkillsInput
+            <img src={logo} alt="logo" onClick={() => navigate('/')}/>
+
+          <SkillsInput
         required
-        autoFocus
         inputProps={{ maxlength: 100 }}
-        error={error.title}
-        value={form.title}
-        placeholder="Digite um título para sua pergunta"
+        error={error.name}
+        value={form.name}
+        placeholder="Digite seu nome completo"
         type="text"
-        name="title"
+        name="name"
         onChange={handleChange}
-        label="Título"
+        label="Nome"
         margin="dense"
       />
-      <SkillsInput
-        multiline
+                <SkillsInput
         required
-        rows={4}
-        error={error.body}
-        value={form.body}
-        placeholder="Descreva sua dúvida"
+        inputProps={{ maxlength: 100 }}
+        error={error.photo}
+        value={form.photo}
+        placeholder="Digite a url da sua foto"
         type="text"
-        name="body"
+        name="photo"
         onChange={handleChange}
-        label="Descrição"
+        label="Foto"
         margin="dense"
       />
-      <PromptContainer
-        type="submit"
-        onSubmit={(e) => {
-          submitSkill(e)
-        }}
-      >
-        <SkillsInput
+                <SkillsInput
+        required
+        inputProps={{ maxlength: 100 }}
+        value={form.role}
+        placeholder="Digite seu cargo"
+        type="text"
+        name="role"
+        onChange={handleChange}
+        label="Cargo"
+        margin="dense"
+      />     
+       <SkillsInput
+      required
+      inputProps={{ maxlength: 100 }}
+      value={form.phone}
+      placeholder="Digite seu telefone"
+      type="phone"
+      name="phone"
+      onChange={handleChange}
+      label="Fone"
+      margin="dense"
+    />
+      <SkillsInput
+        required
+        inputProps={{ maxlength: 100 }}
+        error={error.email}
+        value={form.email}
+        placeholder="Digite seu email"
+        type="email"
+        name="email"
+        onChange={handleChange}
+        label="Email"
+        margin="dense"
+      />
+            <EditFormControl sx={{ marginTop: 1.1 }} variant="outlined">
+        <InputLabel htmlFor="outlined-adornment-password">Senha *</InputLabel>
+        <OutlinedInput
+          error={error.password}
+          id="outlined-adornment-password"
           required
-          error={error.tags}
-          value={tags}
-          placeholder="Digite uma tag"
-          type="text"
-          name="Tags"
-          onChange={(e) => setTags(e.target.value)}
-          label="Tags"
+          value={form.password}
+          name="password"
+          onChange={handleChange}
+          label="Senha"
+          placeholder="Mínimo 6 caracteres"
+          type={showPassword === "text" ? "text" : "password"}
           margin="dense"
-          InputProps={{
-            endAdornment: tags ? (
-              <Button position="end" onClick={submitSkill}>
-                <AddCircleRoundedIcon />
-              </Button>
-            ) : (
-              <InputAdornment position="end">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
+          inputProps={{ pattern: "^.{6,}$" }}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() =>
+                  showPassword === "text"
+                    ? setShowPassword("password")
+                    : setShowPassword("text")
+                }
+                edge="end"
+              >
+                {showPassword === "text" ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
         />
-      </PromptContainer>
-      <ChipContainer>{renderSkills()}</ChipContainer>
+      </EditFormControl>
       <ButtonContainer>
         <Button
           variant="outlined"
@@ -203,7 +215,6 @@ export default function Signup() {
         </Button>
         <ConfirmButton
           variant="contained"
-          disabled={isDisabled()}
           onClick={submitForm}
         >
           Confirmar
