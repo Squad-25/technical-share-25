@@ -167,7 +167,7 @@ export default function Login() {
       </Button>
       <div className="signup">
         <p>Não tem cadastro?</p>
-        <Button className="button" variant="outlined" margin="dense">
+        <Button onClick={() => navigate('/signup')} className="button" variant="outlined" margin="dense">
           Cadastrar
         </Button>
       </div>

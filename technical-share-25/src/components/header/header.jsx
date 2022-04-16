@@ -120,48 +120,57 @@ export default function Header() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  return (
-    <Container
-      activeHome={location.pathname === "/home"}
-      activeProfile={location.pathname === "/profile"}
-      activeRanking={location.pathname === "/rank"}
-    >
-      <header className="header-bg">
-        <div className="header container">
-          <img id="logo"
-            src={logo}
-            alt="Technical Share"
-            onClick={() => navigate("/home")}
-          />
-          <nav>
-            <ul className="header-menu">
-              <li id="home" onClick={() => navigate("/home")}>
-                <Home className="icon" />
-                <p>Home</p>
-              </li>
-              <li id="profile" onClick={() => navigate("/profile")}>
-                <Person className="icon" />
-                <p>Perfil</p>
-              </li>
-              <li id="ranking" onClick={() => navigate("/rank")}>
-                <Leaderboard className="icon" />
-                <p>Ranking</p>
-              </li>
-              <li>
-                <LogoutButton
-                  onClick={() => {
-                    localStorage.clear()
-                    navigate("/")
-                  }}
-                >
-                  <LogoutIcon />
-                </LogoutButton>
-              </li>
-            </ul>
+  let showHeader = false
 
-          </nav>
-        </div>
-      </header>
-    </Container>
-  )
-}
+  if (path !== "/" && path !== "/msuserterms" && path !== '/signup') {
+    showHeader = true
+  } else showHeader = false
+
+  const renderPage = () => {
+    return (
+      <Container
+        activeHome={location.pathname === "/home"}
+        activeProfile={location.pathname === "/profile"}
+        activeRanking={location.pathname === "/rank"}
+      >
+        <header className="header-bg">
+          <div className="header container">
+            <img
+              id="logo"
+              src={logo}
+              alt="Technical Share"
+              onClick={() => navigate("/home")}
+            />
+            <nav>
+              <ul className="header-menu">
+                <li id="home" onClick={() => navigate("/home")}>
+                  <Home className="icon" />
+                  <p>Home</p>
+                </li>
+                <li id="profile" onClick={() => navigate("/profile")}>
+                  <Person className="icon" />
+                  <p>Perfil</p>
+                </li>
+                <li id="ranking" onClick={() => navigate("/rank")}>
+                  <Leaderboard className="icon" />
+                  <p>Ranking</p>
+                </li>
+                <li>
+                  <LogoutButton
+                    onClick={() => {
+                      localStorage.clear()
+                      navigate("/")
+                    }}
+                  >
+                    <LogoutIcon />
+                  </LogoutButton>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </header>
+      </Container>
+    )
+  }
+
+  return <>{showHeader ? renderPage() : <></>}</>

@@ -94,48 +94,108 @@ export default function QuestionCard({ postId, showComments = false }) {
         }
     }
 
-    const handleComment = async () => {
+  const postTime = new Date(post.postDate)
 
-    }
+  let today = new Date()
 
-    return (
-        <Grid item>
+  const calculateTime = () => {
+    const timeInMinutes = parseInt((today - postTime) / 1000 / 60 + 180)
+    if (timeInMinutes === 0) return `agora`
+    else if (timeInMinutes === 1) return `1 minuto`
+    else if (timeInMinutes < 60) {
+      return `${timeInMinutes} minutos`
+    } else if (timeInMinutes >= 60 && timeInMinutes < 120) {
+      return `1h`
+    } else if (timeInMinutes >= 120 && timeInMinutes < 1440) {
+      return `${parseInt(timeInMinutes / 60)}h`
+    } else if (timeInMinutes >= 1440 && timeInMinutes < 2880) return `1 dia`
+    else return `${parseInt(timeInMinutes / 60 / 24)} dias`
+  }
 
-            <Box>
-                <Card variant="outlined" sx={{ width: '312px', height: '312px' }}>
-                    <CardContent sx={{ '&.MuiCardContent-root': { padding: '0 16px' } }}>
-                        <Typography variant="h6" sx={{ height: '48px', margin: '16px 0', lineHeight: '24px' }} gutterBottom>
-                            {post.title}
-                        </Typography>
-                        <Typography paragraph sx={{ height: '100px' }}>
-                            {post.body}
-                        </Typography>
-                        <Stack direction="row" spacing={1}>
-                            {tags.map(tag => {
-                                return (
-                                    <Skill key={tag} label={tag} />
-                                )
-                            })}
-                        </Stack>
-                    </CardContent>
-                    <CardActions sx={{ display: 'flex', justifyContent: 'space-between', margin: '0 10px', '&.MuiCardActions-root': { padding: '4px 0px' } }}>
-                        <Stack direction="row" spacing={0}>
-                            <Button aria-label="curtir a pergunta" onClick={() => handleUpVote()}>
-                                <img src={ArrowUpIcon} alt="curtir a pergunta" />
-                                <span style={{ color: '#212121', marginLeft: '10px' }}>{post.votes}</span>
-                            </Button>
-                            <Button aria-label="responder a pergunta" onClick={() => handleComment()}>
-                                <img src={CommentIcon} alt="responder a pergunta" />
-                                <span style={{ color: '#212121', marginLeft: '10px' }}>{comments.length}</span>
-                            </Button>
-                        </Stack>
+  const handleComment = () => {navigate('/post/'+postId)}
 
-                        <Typography component="span">
-                            1h
-                        </Typography>
-                    </CardActions>
-                </Card>
-            </Box>
-        </Grid>
-    );
-}
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignContent: "center",
+        width: "88vw",
+        margin: "0 auto",
+        marginBottom: "10px",
+      }}
+    >
+      <Card
+        variant="outlined"
+        sx={{
+          margin: "0 auto",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {tags ? (
+          <>
+            <CardContent
+              sx={{
+                "&.MuiCardContent-root": {
+                  padding: "16px 16px 0 16px",
+                  cursor: "pointer",
+                },
+              }}
+              onClick={() => {
+                navigate("/post/" + postId)
+              }}
+            >
+              <Typography variant="h6" sx={{}} gutterBottom>
+                {post.title}
+              </Typography>
+              <Typography paragraph>{post.body}</Typography>
+              <Stack direction="row" spacing={1}>
+                {tags.map((tag) => {
+                  return <Skill key={tag} label={tag} />
+                })}
+              </Stack>
+            </CardContent>
+            <CardActions
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                margin: "0 10px",
+                "&.MuiCardActions-root": { padding: "4px 0px" },
+              }}
+            >
+              <Stack direction="row" spacing={0}>
+                <Button
+                  aria-label="curtir a pergunta"
+                  onClick={() => handleUpVote()}
+                >
+                  <img src={ArrowUpIcon} alt="curtir a pergunta" />
+                  <span style={{ color: "#212121", marginLeft: "10px" }}>
+                    {post.votes}
+                  </span>
+                </Button>
+                <Button
+                  aria-label="responder a pergunta"
+                  onClick={() => handleComment()}
+                >
+                  <img src={CommentIcon} alt="responder a pergunta" />
+                  <span style={{ color: "#212121", marginLeft: "10px" }}>
+                    {comments.length}
+                  </span>
+                </Button>
+              </Stack>
+
+              <Typography component="span">{calculateTime()}</Typography>
+            </CardActions>
+          </>
+        ) : (
+          <Loading />
+        )}
+      </Card>
+
+      {showComments ? <>
+      
+      </> : <></>}
+    </Box>
+  )
