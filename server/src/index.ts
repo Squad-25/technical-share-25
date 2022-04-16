@@ -48,7 +48,12 @@ app.post("/users", async (req: Request, res: Response) => {
            "${req.body.phone}",
            "${req.body.role}"
 ); `)
-    res.status(201).send("Success!")
+
+    let userID = await connection.raw(`
+          SELECT id FROM Users WHERE user_name = "${req.body.name}";
+ `)
+
+    res.status(201).send(userID[0][0])
   } catch (error: any) {
     res.status(500).send("An unexpected error occurred")
   }
@@ -354,7 +359,6 @@ app.delete("/skills", async (req: Request, res: Response) => {
 // Faz login
 app.post("/login", async (req: Request, res: Response) => {
   try {
-
     await connection
       .raw(
         `
