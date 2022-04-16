@@ -6,7 +6,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Chip, Grid, Stack } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
 
 import ArrowUpIcon from '../../assets/arrow-up-icon.svg';
 import CommentIcon from '../../assets/comment-icon.svg';
@@ -199,3 +199,4 @@ export default function QuestionCard({ postId, showComments = false }) {
       </> : <></>}
     </Box>
   )
+      }
