@@ -120,7 +120,9 @@ export default function Header() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const path = location.path
+  const path = location.pathname
+
+  console.log(path)
 
   let showHeader = false
 
