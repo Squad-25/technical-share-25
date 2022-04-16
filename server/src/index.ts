@@ -382,7 +382,6 @@ app.post("/login", async (req: Request, res: Response) => {
         } else throw new Error("Dados incorretos")
       })
   } catch (error: any) {
-    console.log("errou")
     res.status(500).send(error.message)
   }
 })
