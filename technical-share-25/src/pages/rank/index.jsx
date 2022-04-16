@@ -145,11 +145,6 @@ export default function Rank() {
     calculateRanking();
   }, []);
 
-  updateRanking = false;
-
-  console.log('ranking = ', ranking);
-  console.log(updateRanking);
-
   return (
     <PageContainer>
       <Header>

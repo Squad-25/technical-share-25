@@ -4,7 +4,7 @@ import useRequestData from "../../hooks/useRequestData"
 import { BASE_URL, userID } from "../../services/urls"
 import Loading from "../../assets/loading"
 import styledComponents from "styled-components"
-import { Chip } from "@mui/material"
+import { Chip, Grid } from "@mui/material"
 import styled from "@emotion/styled"
 import PhoneIcon from "@mui/icons-material/Phone"
 import MailOutlineIcon from "@mui/icons-material/MailOutline"
@@ -169,46 +169,48 @@ function UserProfile() {
   const renderPage = () => {
     if (data.user) {
       return (
-        <PageContainer>
-          <ProfilePic src={data.user.photo} />
-          <h4>
-            {data.user.user_name}{" "}
-            <EditIcon
-              className="icon"
-              onClick={() => navigate("/profile/edit")}
-            />
-          </h4>
-          <h2>{data.user.role}</h2>
-          <RankContainer>
-            <div>
-              <h2>200</h2>
-              <h3>Interações</h3>
-            </div>
-            <div>
-              <h2>
-                120
-                <Triangle />
-              </h2>
-              <h3>Posição</h3>
-            </div>
-          </RankContainer>
-          <h5>Conhecimentos e skills</h5>
-          <SkillsContainer>{data ? renderSkills() : <></>}</SkillsContainer>
-          <h5 className="contato">Contato</h5>
-          <ContactContainer>
-            <PhoneIcon />
-            <a href={`tel:+55${data.user.phone}`}>{data.user.phone}</a>
-          </ContactContainer>
-          <ContactContainer>
-            <MailOutlineIcon />
-            <a href={`mailto:${data.user.email}`}>{data.user.email}</a>
-          </ContactContainer>
-          <PostsContainer>
-            <h5>Minhas Perguntas</h5>
-            <span />
-            {renderPosts()}
-          </PostsContainer>
-        </PageContainer>
+        <Grid item sx={{ width: '312px', height: '166px !important' }}>
+          <PageContainer>
+            <ProfilePic src={data.user.photo} />
+            <h4>
+              {data.user.user_name}{" "}
+              <EditIcon
+                className="icon"
+                onClick={() => navigate("/profile/edit")}
+              />
+            </h4>
+            <h2>{data.user.role}</h2>
+            <RankContainer>
+              <div>
+                <h2>200</h2>
+                <h3>Interações</h3>
+              </div>
+              <div>
+                <h2>
+                  120
+                  <Triangle />
+                </h2>
+                <h3>Posição</h3>
+              </div>
+            </RankContainer>
+            <h5>Conhecimentos e skills</h5>
+            <SkillsContainer>{data ? renderSkills() : <></>}</SkillsContainer>
+            <h5 className="contato">Contato</h5>
+            <ContactContainer>
+              <PhoneIcon />
+              <a href={`tel:+55${data.user.phone}`}>{data.user.phone}</a>
+            </ContactContainer>
+            <ContactContainer>
+              <MailOutlineIcon />
+              <a href={`mailto:${data.user.email}`}>{data.user.email}</a>
+            </ContactContainer>
+            <PostsContainer>
+              <h5>Minhas Perguntas</h5>
+              <span />
+              {renderPosts()}
+            </PostsContainer>
+          </PageContainer>
+        </Grid>
       )
     } else
       return (

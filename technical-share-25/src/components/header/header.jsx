@@ -120,8 +120,6 @@ export default function Header() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const path = location.pathname
-
   let showHeader = false
 
   if (path !== "/" && path !== "/msuserterms" && path !== '/signup') {
@@ -176,4 +174,3 @@ export default function Header() {
   }
 
   return <>{showHeader ? renderPage() : <></>}</>
-}

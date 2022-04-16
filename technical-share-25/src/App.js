@@ -21,17 +21,17 @@ const AppContainer = styledComponents.div`
 function App() {
 
   return (
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
         <AppContainer>
-          <Header/>
-        <BreadCrumbs/>
+          <BreadCrumbs />
+          < Header />
           <Router />
           <BottomNavigationComponent />
         </AppContainer>
-        </BrowserRouter>
-        <CssBaseline/>
-      </ThemeProvider>
+      </BrowserRouter>
+      <CssBaseline />
+    </ThemeProvider>
   );
 }
 

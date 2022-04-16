@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react"
-import api from "../../services/api"
-import Box from "@mui/material/Box"
-import Card from "@mui/material/Card"
-import CardActions from "@mui/material/CardActions"
-import CardContent from "@mui/material/CardContent"
-import Button from "@mui/material/Button"
-import Typography from "@mui/material/Typography"
-import { Chip, Stack } from "@mui/material"
-import ArrowUpIcon from "../../assets/arrow-up-icon.svg"
-import CommentIcon from "../../assets/comment-icon.svg"
-import styled from "@emotion/styled"
-import Loading from "../../assets/loading"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from 'react';
+import api from '../../services/api';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { Chip, Grid, Stack } from '@mui/material';
+
+import ArrowUpIcon from '../../assets/arrow-up-icon.svg';
+import CommentIcon from '../../assets/comment-icon.svg';
+import styled from '@emotion/styled';
+import Loading from '../../assets/loading';
+import { useNavigate } from 'react-router-dom';
 
 const Skill = styled(Chip)`
   margin: 0 4px 8px 0;
@@ -25,73 +26,73 @@ const Skill = styled(Chip)`
 `
 
 export default function QuestionCard({ postId, showComments = false }) {
-  const [post, setPost] = useState({
-    title: "",
-    body: "",
-    postDate: "",
-    votes: 0,
-    userId: 0,
-  })
+    const [post, setPost] = useState({
+        title: "",
+        body: "",
+        postDate: "",
+        votes: 0,
+        userId: 0,
+    })
 
-  const [comments, setComments] = useState([
-    {
-      body: "",
-      date: "",
-      votes: 0,
-    },
-  ])
+    const [comments, setComments] = useState([
+        {
+            body: "",
+            date: "",
+            votes: 0,
+        },
+    ])
 
-  const [tags, setTags] = useState()
+    const [tags, setTags] = useState([]);
 
-  const navigate = useNavigate()
+    const navigate = useNavigate()
 
-  useEffect(() => {
-    async function fetchPost() {
-      try {
-        const response = await api.get(`posts/${postId}`)
-        const { data } = response
+    useEffect(() => {
+        async function fetchPost() {
+            try {
+                const response = await api.get(`posts/${postId}`)
+                const { data } = response
 
-        const post = {
-          title: data.post.title,
-          body: data.post.body,
-          postDate: data.post.post_date,
-          votes: data.post.votes,
-          userId: data.post.user_id,
+                const post = {
+                    title: data.post.title,
+                    body: data.post.body,
+                    postDate: data.post.post_date,
+                    votes: data.post.votes,
+                    userId: data.post.user_id,
+                }
+
+                const comments = data.comments.map((comment) => {
+                    const formattedComment = {
+                        body: data.comments.comment_body,
+                        date: data.comments.comment_date,
+                        votes: data.comments.comment_votes,
+                    }
+                    return formattedComment
+                })
+
+                const tags = data.tags
+
+                setPost(post)
+                setComments(comments)
+                setTags(tags)
+            } catch (error) {
+                console.log(error.message)
+            }
         }
 
-        const comments = data.comments.map((comment) => {
-          const formattedComment = {
-            body: data.comments.comment_body,
-            date: data.comments.comment_date,
-            votes: data.comments.comment_votes,
-          }
-          return formattedComment
-        })
+        fetchPost()
+    }, [postId])
 
-        const tags = data.tags
+    const handleUpVote = async () => {
+        try {
+            await api.put(`posts/${postId}`, {
+                direction: 1,
+            })
 
-        setPost(post)
-        setComments(comments)
-        setTags(tags)
-      } catch (error) {
-        console.log(error.message)
-      }
+            setPost({ ...post, votes: post.votes + 1 })
+        } catch (error) {
+            console.log(error.message)
+        }
     }
-
-    fetchPost()
-  }, [postId])
-
-  const handleUpVote = async () => {
-    try {
-      await api.put(`posts/${postId}`, {
-        direction: 1,
-      })
-
-      setPost({ ...post, votes: post.votes + 1 })
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
 
   const postTime = new Date(post.postDate)
 
@@ -198,4 +199,3 @@ export default function QuestionCard({ postId, showComments = false }) {
       </> : <></>}
     </Box>
   )
-}
