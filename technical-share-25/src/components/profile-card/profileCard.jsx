@@ -10,12 +10,13 @@ const CardContainer = styledComponents.div`
   display: flex;
   flex-direction: column;
   width: 312px;
-  height: fit-content;
+  height: 166px;
   padding: 12px;
   border: 1px solid #a8a8d1;
   border-radius: 4px;
   margin: 8px;
   cursor: pointer;
+  justify-content: space-between;
 `
 
 const InfoContainer = styledComponents.div`
@@ -58,8 +59,10 @@ const Skill = styled(Chip)`
 
 const SkillsContainer = styledComponents.div`
     display: flex;
+    align-content: center;
     flex-wrap: wrap;
     gap: 8px;
+    flex-grow: 1;
 `
 
 export default function ProfileCard({ mentorId }) {
@@ -71,7 +74,7 @@ export default function ProfileCard({ mentorId }) {
 
   const [tags, setTags] = useState();
 
-  const numberOfSkillsToRender = 3;
+  const numberOfSkillsToRender = 6;
 
   const navigate = useNavigate()
 

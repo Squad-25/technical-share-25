@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import breadcrumbsLogo from "../../assets/breadcrumbs-logo.svg"
 import styled from "@emotion/styled"
 import { Button } from "@mui/material"
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from '@mui/icons-material/ExitToApp';
 
 
 const Container = styledComponents.div`

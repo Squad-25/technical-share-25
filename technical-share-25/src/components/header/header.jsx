@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import styledComponents from "styled-components"
 import logo from "../../assets/technicalshare-logo.svg"
 import { Home, Person, Leaderboard } from "@mui/icons-material"
-import LogoutIcon from '@mui/icons-material/ExitToApp';
+import LogoutIcon from "@mui/icons-material/ExitToApp"
 import styled from "@emotion/styled"
 import { Box } from "@mui/system"
 
@@ -29,6 +29,7 @@ display: none;
 
 #logo {
   width: 260px;
+  cursor: pointer;
   @media screen and (min-width: 1840px){
     width: auto;
   }
@@ -107,11 +108,11 @@ display: none;
 `
 
 const LogoutButton = styled(Box)`
- color: white;
- padding-left: 16px;
- margin-bottom: -8px;
- @media screen and (max-width: 860px){
- padding-left: 0px;
+  color: white;
+  padding-left: 16px;
+  margin-bottom: -8px;
+  @media screen and (max-width: 860px) {
+    padding-left: 0px;
   }
 `
 

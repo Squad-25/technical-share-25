@@ -12,91 +12,89 @@ import ArrowUpIcon from '../../assets/arrow-up-icon.svg';
 import CommentIcon from '../../assets/comment-icon.svg';
 import styled from '@emotion/styled';
 import Loading from '../../assets/loading';
+import { useNavigate } from 'react-router-dom';
 
 const Skill = styled(Chip)`
-margin: 0 4px 8px 0;
-width: fit-content;
-background-color: #fbe9e7;
-color: #000000de;
-font-style: normal;
-font-weight: 400;
-font-size: 12px;
-line-height: 14px;
+  margin: 0 4px 8px 0;
+  width: fit-content;
+  background-color: #fbe9e7;
+  color: #000000de;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
 `
-
 
 export default function QuestionCard({ postId, showComments = false }) {
     const [post, setPost] = useState({
-        title: '',
-        body: '',
-        postDate: '',
+        title: "",
+        body: "",
+        postDate: "",
         votes: 0,
-        userId: 0
-    });
+        userId: 0,
+    })
 
-    const [comments, setComments] = useState([{
-        body: '',
-        date: '',
-        votes: 0
-    }]);
+    const [comments, setComments] = useState([
+        {
+            body: "",
+            date: "",
+            votes: 0,
+        },
+    ])
 
     const [tags, setTags] = useState([]);
 
+    const navigate = useNavigate()
 
     useEffect(() => {
         async function fetchPost() {
-
             try {
-                const response = await api.get(`posts/${postId}`);
-                const { data } = response;
+                const response = await api.get(`posts/${postId}`)
+                const { data } = response
 
                 const post = {
                     title: data.post.title,
                     body: data.post.body,
                     postDate: data.post.post_date,
                     votes: data.post.votes,
-                    userId: data.post.user_id
+                    userId: data.post.user_id,
                 }
 
-                const comments = data.comments.map(comment => {
+                const comments = data.comments.map((comment) => {
                     const formattedComment = {
                         body: data.comments.comment_body,
                         date: data.comments.comment_date,
-                        votes: data.comments.comment_votes
+                        votes: data.comments.comment_votes,
                     }
-                    return formattedComment;
+                    return formattedComment
                 })
 
-                const tags = data.tags;
+                const tags = data.tags
 
-                setPost(post);
-                setComments(comments);
-                setTags(tags);
-
+                setPost(post)
+                setComments(comments)
+                setTags(tags)
             } catch (error) {
-                console.log(error.message);
+                console.log(error.message)
             }
         }
 
-        fetchPost();
-
-    }, [postId]);
-
+        fetchPost()
+    }, [postId])
 
     const handleUpVote = async () => {
         try {
             await api.put(`posts/${postId}`, {
-                direction: 1
-            });
+                direction: 1,
+            })
 
-            setPost({ ...post, votes: post.votes + 1 });
-
+            setPost({ ...post, votes: post.votes + 1 })
         } catch (error) {
-            console.log(error.message);
+            console.log(error.message)
         }
     }
 
-    const handleComment = (postId) => {
+    const handleComment = async () => {
 
     }
 
