@@ -34,7 +34,10 @@ const ChipContainer = styled(Box)`
 
 // ARRUMAR!!
 const SkillsInput = styled(TextField)`
-  margin-top: 8px;
+  margin: 8px;
+  @media screen and (max-width: 704px) {
+    width: 312px;
+}
 `
 
 const Skill = styled(Chip)`
