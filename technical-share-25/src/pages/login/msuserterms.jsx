@@ -4,12 +4,15 @@ import { useNavigate } from "react-router-dom"
 import styledComponents from "styled-components"
 import microsoftlogo from "../../assets/microsoftlogo.svg"
 import { userID } from "../../services/urls"
+import logo from "../../assets/breadcrumbs-logo.svg"
 
 const PageContainer = styledComponents.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   padding: 24px;
+  max-width: 540px;
   a {
     color: #BA3300;
   }
@@ -37,6 +40,13 @@ const PageContainer = styledComponents.div`
     font-weight: 400;
     font-size: 14px;
   }
+  img{
+    margin-bottom: 32px;
+    cursor: pointer;
+    @media screen and (max-width: 704px) {
+      display: none;
+    }
+  }
   ul {
     margin-left: 16px;
   }
@@ -45,6 +55,8 @@ const PageContainer = styledComponents.div`
     align-content: center;
     junstify-contenc: center;
     width: 100%;
+    margin: 10vh 0;
+    border: 1px solid black;
   }
 `
 
@@ -53,6 +65,7 @@ export default function Msuserterms() {
 
   return (
     <PageContainer>
+            <img src={logo} alt="logo" onClick={() => navigate('/')}/>
       <img src={microsoftlogo} alt="MicroSoft logo"></img>
       <h1>Permissões Necessárias</h1>
       <h2>Technical Share</h2>

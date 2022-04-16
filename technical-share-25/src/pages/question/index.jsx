@@ -12,6 +12,7 @@ import CommentIcon from "../../assets/comment-icon.svg"
 import styled from "@emotion/styled"
 import Loading from "../../assets/loading"
 import { useNavigate, useParams } from "react-router-dom"
+import BreadCrumbQuestion from "./breadcrumbquestion"
 
 const Skill = styled(Chip)`
   margin: 0 4px 8px 0;
@@ -25,10 +26,9 @@ const Skill = styled(Chip)`
 `
 
 export default function QuestionPage() {
+  const params = useParams()
+  const postId = params.id
 
-    const params = useParams()
-    const postId = params.id
-    
   const [post, setPost] = useState({
     title: "",
     body: "",
@@ -128,6 +128,7 @@ export default function QuestionPage() {
         marginBottom: "10px",
       }}
     >
+      <BreadCrumbQuestion />
       <Card
         variant="outlined"
         sx={{
@@ -180,7 +181,7 @@ export default function QuestionPage() {
                 >
                   <img src={CommentIcon} alt="responder a pergunta" />
                   <span style={{ color: "#212121", marginLeft: "10px" }}>
-                    {comments.length}
+                    1
                   </span>
                 </Button>
               </Stack>
@@ -193,6 +194,62 @@ export default function QuestionPage() {
         )}
       </Card>
 
+      <Card
+        variant="outlined"
+        sx={{
+          margin: "8px 0",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {tags ? (
+          <>
+            <CardContent
+              sx={{
+                "&.MuiCardContent-root": {
+                  padding: "16px 16px 0 16px",
+                },
+              }}
+            >
+              <Typography variant="h6" sx={{}} gutterBottom>
+                Comentário
+              </Typography>
+              <Typography paragraph>Eu sou um comentário</Typography>
+            </CardContent>
+            <CardActions
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                margin: "0 10px",
+                "&.MuiCardActions-root": { padding: "4px 0px" },
+              }}
+            >
+              <Stack direction="row" spacing={0}>
+                <Button aria-label="curtir a pergunta">
+                  <img src={ArrowUpIcon} alt="curtir a pergunta" />
+                  <span style={{ color: "#212121", marginLeft: "10px" }}>
+                    0
+                  </span>
+                </Button>
+                <Button
+                  aria-label="responder a pergunta"
+                  onClick={() => handleComment()}
+                >
+                  <img src={CommentIcon} alt="responder a pergunta" />
+                  <span style={{ color: "#212121", marginLeft: "10px" }}>
+                    {comments.length}
+                  </span>
+                </Button>
+              </Stack>
+
+              <Typography component="span">{calculateTime()}</Typography>
+            </CardActions>
+          </>
+        ) : (
+          <Loading />
+        )}
+      </Card>
     </Box>
   )
 }

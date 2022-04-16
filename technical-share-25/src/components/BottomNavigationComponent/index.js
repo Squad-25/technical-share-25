@@ -21,7 +21,7 @@ export default function BottomNavigationComponent() {
 
   const renderNav = () => {
     
-    if (path !== '/' && path !== '/msuserterms')
+    if (path !== '/' && path !== '/msuserterms' && path !== '/signup')
     return (
       <Container>
 

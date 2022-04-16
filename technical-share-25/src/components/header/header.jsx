@@ -124,7 +124,7 @@ export default function Header() {
 
   let showHeader = false
 
-  if (path !== "/" && path !== "/msuserterms") {
+  if (path !== "/" && path !== "/msuserterms" && path !== '/signup') {
     showHeader = true
   } else showHeader = false
 

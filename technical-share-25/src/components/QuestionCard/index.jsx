@@ -111,7 +111,7 @@ export default function QuestionCard({ postId, showComments = false }) {
     else return `${parseInt(timeInMinutes / 60 / 24)} dias`
   }
 
-  const handleComment = (postId) => {}
+  const handleComment = () => {navigate('/post/'+postId)}
 
   return (
     <Box
