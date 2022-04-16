@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import styledComponents from "styled-components"
 import logo from "../../assets/technicalshare-logo.svg"
 import { Home, Person, Leaderboard } from "@mui/icons-material"
-import LogoutIcon from '@mui/icons-material/ExitToApp';
+import LogoutIcon from "@mui/icons-material/ExitToApp"
 import styled from "@emotion/styled"
 import { Box } from "@mui/system"
 
@@ -29,6 +29,7 @@ display: none;
 
 #logo {
   width: 260px;
+  cursor: pointer;
   @media screen and (min-width: 1840px){
     width: auto;
   }
@@ -107,11 +108,11 @@ display: none;
 `
 
 const LogoutButton = styled(Box)`
- color: white;
- padding-left: 16px;
- margin-bottom: -8px;
- @media screen and (max-width: 860px){
- padding-left: 0px;
+  color: white;
+  padding-left: 16px;
+  margin-bottom: -8px;
+  @media screen and (max-width: 860px) {
+    padding-left: 0px;
   }
 `
 
@@ -119,48 +120,60 @@ export default function Header() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  return (
-    <Container
-      activeHome={location.pathname === "/home"}
-      activeProfile={location.pathname === "/profile"}
-      activeRanking={location.pathname === "/rank"}
-    >
-      <header className="header-bg">
-        <div className="header container">
-          <img id="logo"
-            src={logo}
-            alt="Technical Share"
-            onClick={() => navigate("/home")}
-          />
-          <nav>
-            <ul className="header-menu">
-              <li id="home" onClick={() => navigate("/home")}>
-                <Home className="icon" />
-                <p>Home</p>
-              </li>
-              <li id="profile" onClick={() => navigate("/profile")}>
-                <Person className="icon" />
-                <p>Perfil</p>
-              </li>
-              <li id="ranking" onClick={() => navigate("/rank")}>
-                <Leaderboard className="icon" />
-                <p>Ranking</p>
-              </li>
-              <li>
-              <LogoutButton
-            onClick={() => {
-              localStorage.clear()
-              navigate("/")
-            }}
-          >
-            <LogoutIcon />
-          </LogoutButton>
-              </li>
-            </ul>
-            
-          </nav>
-        </div>
-      </header>
-    </Container>
-  )
+  const path = location.pathname
+
+  let showHeader = false
+
+  if (path !== "/" && path !== "/msuserterms") {
+    showHeader = true
+  } else showHeader = false
+
+  const renderPage = () => {
+    return (
+      <Container
+        activeHome={location.pathname === "/home"}
+        activeProfile={location.pathname === "/profile"}
+        activeRanking={location.pathname === "/rank"}
+      >
+        <header className="header-bg">
+          <div className="header container">
+            <img
+              id="logo"
+              src={logo}
+              alt="Technical Share"
+              onClick={() => navigate("/home")}
+            />
+            <nav>
+              <ul className="header-menu">
+                <li id="home" onClick={() => navigate("/home")}>
+                  <Home className="icon" />
+                  <p>Home</p>
+                </li>
+                <li id="profile" onClick={() => navigate("/profile")}>
+                  <Person className="icon" />
+                  <p>Perfil</p>
+                </li>
+                <li id="ranking" onClick={() => navigate("/rank")}>
+                  <Leaderboard className="icon" />
+                  <p>Ranking</p>
+                </li>
+                <li>
+                  <LogoutButton
+                    onClick={() => {
+                      localStorage.clear()
+                      navigate("/")
+                    }}
+                  >
+                    <LogoutIcon />
+                  </LogoutButton>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </header>
+      </Container>
+    )
+  }
+
+  return <>{showHeader ? renderPage() : <></>}</>
 }
