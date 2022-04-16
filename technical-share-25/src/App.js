@@ -6,6 +6,7 @@ import { ThemeProvider } from "@emotion/react"
 import theme from "./constants/theme"
 import BreadCrumbs from "./components/breadcrumbs/breadCrumbs"
 import styledComponents from "styled-components"
+import Header from "./components/header/header"
 
 const AppContainer = styledComponents.div`
 @media screen and (min-width: 704px) {
@@ -24,6 +25,7 @@ function App() {
       <BrowserRouter>
         <AppContainer>
           <BreadCrumbs />
+          < Header />
           <Router />
           <BottomNavigationComponent />
         </AppContainer>

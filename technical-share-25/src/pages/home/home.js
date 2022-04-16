@@ -12,6 +12,7 @@ import SearchBar from "../../components/search-bar/searchBar";
 import HomeFab from "../../components/home-fab";
 import TopBar from '../../components/TopBar';
 import { Box } from "@mui/system";
+import Header from "../../components/header/header";
 
 const TogglesGroup = styledComponents.div`
   @media(min-width: 360px){
@@ -130,25 +131,22 @@ export default function Home() {
   }
 
   return (
-    <Box sx={{ width: '100wv', padding: '24.5px', marginTop: '100px', marginBottom: "140px" }}>
-
-      < TopBar />
+    <Box sx={{ width: '100wv', padding: '24.5px', marginBottom: "140px" }}>
 
       <SearchHeader>
         <Grid container mobile={12}>
-          <Grid container item alignItems="center" justifyItems="center" spacing={0}>
+          <Grid container item alignItems="center" justifyItems="center" spacing={3}>
 
-            <Grid item mobile={12} tablet={6} desktop={4}>
+            <Grid item mobile={12} tablet={6} desktop={6}>
               <TogglePeoplePost toggle={toggle} setToggle={setToggle} />
             </Grid>
 
-            <Grid item mobile={12} tablet={6} desktop={4}>
+            <Grid item mobile={12} tablet={6} desktop={6}>
               <FormGroup sx={{ fontSize: '12px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                 <Switch />
                 <label>Filtrar perguntas pelas minhas skills</label>
               </FormGroup>
             </Grid>
-
           </Grid>
         </Grid>
 
@@ -169,7 +167,9 @@ export default function Home() {
       }
 
 
-      <Grid container spacing={1} sx={{ width: '100wv', margin: '0 auto' }} columns={{ mobile: 12, tablet: 6, desktop: 4 }}>
+      <Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'center', margin: '0 auto' }} /* columns={{ mobile: 12, tablet: 2, desktop: 4 }} */>
+
+
         {
           toggle === 'pessoas' ?
             mentors.map(mentor => (
@@ -181,7 +181,11 @@ export default function Home() {
             ))
         }
 
+
+
       </Grid>
+
+
 
       <BottomNavigationComponent />
       <HomeFab />

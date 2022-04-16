@@ -72,12 +72,28 @@ export default function BreadCrumbs() {
         return (
           <Container>
             <Icon /> <p>Meu Perfil</p>
+            <LogoutButton
+            onClick={() => {
+              localStorage.clear()
+              navigate("/")
+            }}
+          >
+            <LogoutIcon />
+          </LogoutButton>
           </Container>
         )
       case "/profile/edit":
         return (
           <Container>
             <Icon /> <p>Editar Perfil</p>
+            <LogoutButton
+            onClick={() => {
+              localStorage.clear()
+              navigate("/")
+            }}
+          >
+            <LogoutIcon />
+          </LogoutButton>
           </Container>
         )
       case "/rank":

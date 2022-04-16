@@ -101,15 +101,15 @@ export default function QuestionCard({ postId, showComments = false }) {
     }
 
     return (
-        <Grid item sx={{ width: '312px', height: '312px !important' }}>
+        <Grid item>
 
             <Box>
-                <Card variant="outlined" >
+                <Card variant="outlined" sx={{ width: '312px', height: '312px' }}>
                     <CardContent sx={{ '&.MuiCardContent-root': { padding: '0 16px' } }}>
-                        <Typography variant="h6" sx={{}} gutterBottom>
+                        <Typography variant="h6" sx={{ height: '48px', margin: '16px 0', lineHeight: '24px' }} gutterBottom>
                             {post.title}
                         </Typography>
-                        <Typography paragraph>
+                        <Typography paragraph sx={{ height: '100px' }}>
                             {post.body}
                         </Typography>
                         <Stack direction="row" spacing={1}>
