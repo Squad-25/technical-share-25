@@ -102,15 +102,6 @@ export default function Signup() {
   }
 
 
-
-  // "name": "Larry",
-  // "email": "l@l.com",
-  // "password": "1",
-  // "photo": "https://avatars.githubusercontent.com/u/92735047?v=4",
-  // "phone": "(11) 99999-0000",
-  // "role": "UX"
-
-
   return (
     <PageContainer>
             <img src={logo} alt="logo" onClick={() => navigate('/')}/>
@@ -215,7 +206,7 @@ export default function Signup() {
         </Button>
         <ConfirmButton
           variant="contained"
-          onClick={submitForm}
+          onClick={() => submitForm()}
         >
           Confirmar
         </ConfirmButton>
