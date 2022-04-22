@@ -1,4 +1,13 @@
-import { Button, Chip, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material"
+import {
+  Button,
+  Chip,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material"
 import React, { useState } from "react"
 import styledComponents from "styled-components"
 import styled from "@emotion/styled"
@@ -9,7 +18,6 @@ import { Box } from "@mui/system"
 import { useForm } from "../../hooks/useForm"
 import logo from "../../assets/breadcrumbs-logo.svg"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
-
 
 const EditInput = styled(TextField)`
   margin-top: 24px;
@@ -79,34 +87,46 @@ const Skill = styled(Chip)`
 `
 
 export default function Signup() {
-  const { form, handleChange, clearForm } = useForm({ name: "", photo: "", role: "", email: "", password: "" })
-  const [error, setError] = useState({ name: false, photo: false, role: false, email: false, password: false})
+  const { form, handleChange, clearForm } = useForm({
+    name: "",
+    photo: "",
+    role: "",
+    email: "",
+    password: "",
+  })
+  const [error, setError] = useState({
+    name: false,
+    photo: false,
+    role: false,
+    email: false,
+    password: false,
+  })
   const [showPassword, setShowPassword] = useState("password")
-
+  const [disabled, setDisabled] = useState(false)
 
   const navigate = useNavigate()
 
   const submitForm = (e) => {
     e.preventDefault()
 
-
-      axios
-        .post(BASE_URL + `/users`, form)
-        .then((res) => {
-          localStorage.setItem('user_id', res.data.id)
-          navigate("/skills-prompt")
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+    setDisabled(true)
+    axios
+      .post(BASE_URL + `/users`, form)
+      .then((res) => {
+        localStorage.setItem("user_id", res.data.id)
+        navigate("/skills-prompt")
+      })
+      .catch((err) => {
+        setDisabled(false)
+        console.log(err)
+      })
   }
-
 
   return (
     <PageContainer>
-            <img src={logo} alt="logo" onClick={() => navigate('/')}/>
+      <img src={logo} alt="logo" onClick={() => navigate("/")} />
 
-          <SkillsInput
+      <SkillsInput
         required
         inputProps={{ maxlength: 100 }}
         error={error.name}
@@ -118,7 +138,7 @@ export default function Signup() {
         label="Nome"
         margin="dense"
       />
-                <SkillsInput
+      <SkillsInput
         required
         inputProps={{ maxlength: 100 }}
         error={error.photo}
@@ -130,7 +150,7 @@ export default function Signup() {
         label="Foto"
         margin="dense"
       />
-                <SkillsInput
+      <SkillsInput
         required
         inputProps={{ maxlength: 100 }}
         value={form.role}
@@ -140,18 +160,18 @@ export default function Signup() {
         onChange={handleChange}
         label="Cargo"
         margin="dense"
-      />     
-       <SkillsInput
-      required
-      inputProps={{ maxlength: 100 }}
-      value={form.phone}
-      placeholder="Digite seu telefone"
-      type="phone"
-      name="phone"
-      onChange={handleChange}
-      label="Fone"
-      margin="dense"
-    />
+      />
+      <SkillsInput
+        required
+        inputProps={{ maxlength: 100 }}
+        value={form.phone}
+        placeholder="Digite seu telefone"
+        type="phone"
+        name="phone"
+        onChange={handleChange}
+        label="Fone"
+        margin="dense"
+      />
       <SkillsInput
         required
         inputProps={{ maxlength: 100 }}
@@ -164,7 +184,7 @@ export default function Signup() {
         label="Email"
         margin="dense"
       />
-            <EditFormControl sx={{ marginTop: 1.1 }} variant="outlined">
+      <EditFormControl sx={{ marginTop: 1.1 }} variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">Senha *</InputLabel>
         <OutlinedInput
           error={error.password}
@@ -205,8 +225,9 @@ export default function Signup() {
           Cancelar
         </Button>
         <ConfirmButton
+          disabled={disabled}
           variant="contained"
-          onClick={() => submitForm()}
+          onClick={(e) => submitForm(e)}
         >
           Confirmar
         </ConfirmButton>

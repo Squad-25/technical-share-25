@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3003/'
+    baseURL: 'https://technical-share-squad25.herokuapp.com/'
 })
 
 export default api;
