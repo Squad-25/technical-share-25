@@ -5,6 +5,10 @@ Projeto do hackathon season 3 feito pela FCamara
 
 Technical Share é uma plataforma para centralização e classificação de competências dos colaboradores. Projetada para o Grupo FCamera, cujo qual realizou a terceira edição de seu Hackathon. Foi proposto um desafio, onde esta solução foi desenvolvida em 15 dias entre um time de desenvolvedores e designers, trabalhando em conjunto para oferecer o melhor trabalho possível
 
+# Deploy
+
+https://technicalshare25.surge.sh
+
 ## 🚀 Começando
 
 ### 📋 Pré-requisitos
@@ -20,7 +24,7 @@ Para rodar o projeto execute os comandos abaixo no seu terminal:
 
 Para copiar o projeto 
 `git clone https://github.com/Squad-25/technical-share-25.git`
-  
+
 Para rodar o back-end entre na pasta do projeto "technical-share-25" e execute:
 
 * `cd server`
